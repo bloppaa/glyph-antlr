@@ -37,8 +37,19 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 			vars.add(id);
 		}
 
-		String type = ctx.INT_TYPE().getText();
+		String type = ctx.getChild(0).getText();
 		Expression expr = visit(ctx.expr());
+
+		if (expr instanceof Number) {
+			Number num = (Number) expr;
+			if (type.equals("int") && !num.isInt) {
+				String value = String.valueOf(num.num);
+				String error = String.format(
+						"Error: cannot assign float %s to int (%d:%d)", value, line, column);
+				semanticErrors.add(error);
+			}
+		}
+
 		return new VariableDeclaration(id, type, expr);
 	}
 
@@ -81,8 +92,10 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
 	@Override
 	public Expression visitNumber(NumberContext ctx) {
-		int num = Integer.parseInt(ctx.NUM().getText());
-		return new Number(num);
+		String text = ctx.NUM().getText();
+		boolean isInt = !text.contains(".");
+		double num = Double.parseDouble(text);
+		return new Number(num, isInt);
 	}
 
 }

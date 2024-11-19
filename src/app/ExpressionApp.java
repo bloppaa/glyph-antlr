@@ -12,6 +12,7 @@ import antlr.ExprParser;
 import expression.AntlrToProgram;
 import expression.ExpressionProcessor;
 import expression.Program;
+import expression.SyntaxErrorListener;
 
 public class ExpressionApp {
 
@@ -23,6 +24,10 @@ public class ExpressionApp {
 			ExprParser parser = getParser(fileName);
 
 			ParseTree antlrAST = parser.prog();
+
+			if (SyntaxErrorListener.hasError) {
+				return;
+			}
 
 			AntlrToProgram progVisitor = new AntlrToProgram();
 			Program prog = progVisitor.visit(antlrAST);
@@ -48,6 +53,9 @@ public class ExpressionApp {
 			ExprLexer lexer = new ExprLexer(input);
 			CommonTokenStream tokens = new CommonTokenStream(lexer);
 			parser = new ExprParser(tokens);
+
+			parser.removeErrorListeners();
+			parser.addErrorListener(new SyntaxErrorListener());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -7,11 +7,13 @@ import java.util.Map;
 
 public class ExpressionProcessor {
 	List<Expression> list;
-	public Map<String, Integer> values;
+	public Map<String, Double> values;
+	public Map<String, String> types;
 
 	public ExpressionProcessor(List<Expression> list) {
 		this.list = list;
-		values = new HashMap<String, Integer>();
+		values = new HashMap<>();
+		types = new HashMap<>();
 	}
 
 	public List<String> getEvaluationResults() {
@@ -21,11 +23,17 @@ public class ExpressionProcessor {
 			Expression e = list.get(i);
 			if (e instanceof VariableDeclaration) {
 				VariableDeclaration decl = (VariableDeclaration) e;
-				int result = getEvalResult(decl.expr);
+				double result = getEvalResult(decl.expr);
+
+				if (decl.type.equals("int") && result % 1 != 0) {
+					throw new IllegalArgumentException("Error: cannot assign float to an int variable");
+				}
+
 				values.put(decl.id, result);
 			} else {
+				// TODO: debugging purposes. Remove later
 				String input = e.toString();
-				int result = getEvalResult(e);
+				double result = getEvalResult(e);
 				evaluations.add(input + " is " + result);
 			}
 		}
@@ -33,8 +41,8 @@ public class ExpressionProcessor {
 		return evaluations;
 	}
 
-	private int getEvalResult(Expression e) {
-		int result = 0;
+	private double getEvalResult(Expression e) {
+		double result = 0;
 
 		if (e instanceof Number) {
 			Number num = (Number) e;
@@ -47,8 +55,8 @@ public class ExpressionProcessor {
 			result = getEvalResult(parens.expr);
 		} else if (e instanceof AddSub) {
 			AddSub add = (AddSub) e;
-			int left = getEvalResult(add.left);
-			int right = getEvalResult(add.right);
+			double left = getEvalResult(add.left);
+			double right = getEvalResult(add.right);
 			switch (add.operator) {
 				case "+":
 					result = left + right;
@@ -59,8 +67,8 @@ public class ExpressionProcessor {
 			}
 		} else if (e instanceof MultDivMod) {
 			MultDivMod mult = (MultDivMod) e;
-			int left = getEvalResult(mult.left);
-			int right = getEvalResult(mult.right);
+			double left = getEvalResult(mult.left);
+			double right = getEvalResult(mult.right);
 			switch (mult.operator) {
 				case "*":
 					result = left * right;
