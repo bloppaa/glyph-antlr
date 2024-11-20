@@ -74,6 +74,9 @@ public class ExpressionProcessor {
 					result = left * right;
 					break;
 				case "/":
+					if (right == 0) {
+						throw new IllegalArgumentException("Error: division by zero");
+					}
 					result = left / right;
 					break;
 				case "%":

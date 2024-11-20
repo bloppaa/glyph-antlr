@@ -33,9 +33,13 @@ public class ExpressionApp {
 			Program prog = progVisitor.visit(antlrAST);
 
 			if (progVisitor.semanticErrors.isEmpty()) {
-				ExpressionProcessor ep = new ExpressionProcessor(prog.expressions);
-				for (String evaluation : ep.getEvaluationResults()) {
-					System.out.println(evaluation);
+				try {
+					ExpressionProcessor ep = new ExpressionProcessor(prog.expressions);
+					for (String evaluation : ep.getEvaluationResults()) {
+						System.out.println(evaluation);
+					}
+				} catch (Exception e) {
+					System.err.println(e.getMessage());
 				}
 			} else {
 				for (String err : progVisitor.semanticErrors) {

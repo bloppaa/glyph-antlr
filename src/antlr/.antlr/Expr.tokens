@@ -12,6 +12,7 @@ FLOAT_TYPE=11
 ID=12
 NUM=13
 WS=14
+COMMENT=15
 ';'=1
 '='=2
 '-'=3
