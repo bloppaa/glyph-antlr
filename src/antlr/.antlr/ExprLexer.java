@@ -1,4 +1,4 @@
-// Generated from Expr.g4 by ANTLR 4.13.2
+// Generated from c:/Users/pablo/OneDrive/Documentos/UCN/2024-2/Funda/workspace/SeaSharp/src/antlr/Expr.g4 by ANTLR 4.13.1
 
 package antlr;
 
@@ -13,7 +13,7 @@ import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue", "this-escape"})
 public class ExprLexer extends Lexer {
-	static { RuntimeMetaData.checkVersion("4.13.2", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.13.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =

@@ -9,7 +9,8 @@ prog: ((decl | expr) ';')+ EOF # Program;
 decl: (INT_TYPE | FLOAT_TYPE) ID '=' expr # Declaration;
 
 expr:
-	'(' expr ')'					# Parens
+	'-' expr						# UnaryMinus
+	| '(' expr ')'					# Parens
 	| expr ('*' | '/' | '%') expr	# MultDivMod
 	| expr ('+' | '-') expr			# AddSub
 	| ID							# Variable
@@ -18,5 +19,5 @@ expr:
 INT_TYPE: 'int';
 FLOAT_TYPE: 'float';
 ID: [a-z][a-zA-Z0-9_]*;
-NUM: '-'? ('0' | [1-9][0-9]*) ('.' [0-9]+)?;
+NUM: ('0' | [1-9][0-9]*) ('.' [0-9]+)?;
 WS: [ \t\n\r]+ -> skip;

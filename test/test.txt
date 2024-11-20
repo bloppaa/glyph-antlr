@@ -1,12 +1,1 @@
-int i = 3;
-int j = 1 + 4;
-float k = 3.14;
-float a = 10;
 
-int b = i + a;
-
-i;
-j;
-k;
-a;
-b;

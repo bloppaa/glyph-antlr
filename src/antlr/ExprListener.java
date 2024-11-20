@@ -93,4 +93,16 @@ public interface ExprListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMultDivMod(ExprParser.MultDivModContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code UnaryMinus}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnaryMinus(ExprParser.UnaryMinusContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code UnaryMinus}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnaryMinus(ExprParser.UnaryMinusContext ctx);
 }

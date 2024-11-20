@@ -11,6 +11,7 @@ import antlr.ExprParser.DeclarationContext;
 import antlr.ExprParser.MultDivModContext;
 import antlr.ExprParser.NumberContext;
 import antlr.ExprParser.ParensContext;
+import antlr.ExprParser.UnaryMinusContext;
 import antlr.ExprParser.VariableContext;
 
 public class AntlrToExpression extends ExprBaseVisitor<Expression> {
@@ -45,12 +46,32 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 			if (type.equals("int") && !num.isInt) {
 				String value = String.valueOf(num.num);
 				String error = String.format(
-						"Error: cannot assign float %s to int (%d:%d)", value, line, column);
+						"Error: cannot assign float %s to int (line %d, column %d)", value, line, column);
 				semanticErrors.add(error);
 			}
 		}
 
 		return new VariableDeclaration(id, type, expr);
+	}
+
+	@Override
+	public Expression visitUnaryMinus(UnaryMinusContext ctx) {
+		Expression expr = visit(ctx.expr());
+
+		if (expr instanceof UnaryMinus) {
+			UnaryMinus innerMinus = (UnaryMinus) expr;
+			if (innerMinus.expr instanceof Number || innerMinus.expr instanceof Variable) {
+				Token token = ctx.start;
+				int line = token.getLine();
+				int column = token.getCharPositionInLine() + 1;
+
+				String error = String.format(
+						"Error: consecutive unary minus not allowed (%d:%d)", line, column);
+				semanticErrors.add(error);
+			}
+		}
+
+		return new UnaryMinus(expr);
 	}
 
 	@Override

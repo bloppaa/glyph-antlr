@@ -80,6 +80,10 @@ public class ExpressionProcessor {
 					result = left % right;
 					break;
 			}
+		} else if (e instanceof UnaryMinus) {
+			UnaryMinus unary = (UnaryMinus) e;
+			double expr = getEvalResult(unary.expr);
+			result = -expr;
 		}
 		return result;
 	}

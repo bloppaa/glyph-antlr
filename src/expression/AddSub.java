@@ -3,7 +3,7 @@ package expression;
 public class AddSub extends Expression {
 	Expression left;
 	Expression right;
-	String operator = "+";
+	String operator;
 
 	public AddSub(Expression left, Expression right, String operator) {
 		this.left = left;
