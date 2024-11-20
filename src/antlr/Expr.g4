@@ -4,9 +4,11 @@ grammar Expr;
 package antlr;
 }
 
-prog: ((decl | expr) ';')+ EOF # Program;
+prog: ((decl | expr | assign) ';')+ EOF # Program;
 
 decl: (INT_TYPE | FLOAT_TYPE) ID '=' expr # Declaration;
+
+assign: ID '=' expr # Assignment;
 
 expr:
 	'-' expr						# UnaryMinus

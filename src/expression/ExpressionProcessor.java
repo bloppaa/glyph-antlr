@@ -24,12 +24,25 @@ public class ExpressionProcessor {
 			if (e instanceof VariableDeclaration) {
 				VariableDeclaration decl = (VariableDeclaration) e;
 				double result = getEvalResult(decl.expr);
+				boolean isInt = result % 1 == 0;
 
-				if (decl.type.equals("int") && result % 1 != 0) {
+				if (decl.type.equals("int") && !isInt) {
 					throw new IllegalArgumentException("Error: cannot assign float to an int variable");
 				}
 
-				values.put(decl.id, result);
+				values.put(decl.id, isInt ? (int) result : result);
+				types.put(decl.id, decl.type);
+			} else if (e instanceof Assignment) {
+				Assignment assign = (Assignment) e;
+				double result = getEvalResult(assign.expr);
+				boolean isInt = result % 1 == 0;
+
+				if (types.get(assign.id).equals("int") && !isInt) {
+					throw new IllegalArgumentException(String.format(
+							"Error: cannot assign float '%s' to int variable '%s'", result, assign.id));
+				}
+
+				values.put(assign.id, isInt ? (int) result : result);
 			} else {
 				// TODO: debugging purposes. Remove later
 				String input = e.toString();
