@@ -11,17 +11,18 @@ decl: (INT_TYPE | FLOAT_TYPE | BOOL_TYPE) ID '=' expr # Declaration;
 assign: ID '=' expr # Assignment;
 
 expr:
-	'(' expr ')'										# Parens
-	| '-' expr											# UnaryMinus
-	| expr ('*' | '/' | '%') expr						# MultDivMod
-	| expr ('+' | '-') expr								# AddSub
-	| expr ('>' | '>=' | '<' | '<=' | '==' | '!=') expr	# CompareEqual
-	| '!' expr											# Not
-	| expr '&&' expr									# And
-	| expr '||' expr									# Or
-	| ID												# Variable
-	| NUM												# Number
-	| BOOL												# Boolean;
+	'(' expr ')'							# Parens
+	| '-' expr								# UnaryMinus
+	| '!' expr								# Not
+	| expr ('*' | '/' | '%') expr			# MultDivMod
+	| expr ('+' | '-') expr					# AddSub
+	| expr ('>' | '>=' | '<' | '<=') expr	# Comparison
+	| expr ('==' | '!=') expr				# Equality
+	| expr '&&' expr						# And
+	| expr '||' expr						# Or
+	| ID									# Variable
+	| NUM									# Number
+	| BOOL									# Boolean;
 
 INT_TYPE: 'int';
 FLOAT_TYPE: 'float';

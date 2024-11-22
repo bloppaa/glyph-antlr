@@ -106,6 +106,18 @@ public interface ExprListener extends ParseTreeListener {
 	 */
 	void exitAddSub(ExprParser.AddSubContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code Comparison}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterComparison(ExprParser.ComparisonContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Comparison}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitComparison(ExprParser.ComparisonContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code Parens}
 	 * labeled alternative in {@link ExprParser#expr}.
 	 * @param ctx the parse tree
@@ -154,6 +166,18 @@ public interface ExprListener extends ParseTreeListener {
 	 */
 	void exitUnaryMinus(ExprParser.UnaryMinusContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code Equality}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterEquality(ExprParser.EqualityContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Equality}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitEquality(ExprParser.EqualityContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code Boolean}
 	 * labeled alternative in {@link ExprParser#expr}.
 	 * @param ctx the parse tree
@@ -165,16 +189,4 @@ public interface ExprListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBoolean(ExprParser.BooleanContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code CompareEqual}
-	 * labeled alternative in {@link ExprParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterCompareEqual(ExprParser.CompareEqualContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code CompareEqual}
-	 * labeled alternative in {@link ExprParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitCompareEqual(ExprParser.CompareEqualContext ctx);
 }

@@ -12,8 +12,9 @@ import antlr.ExprParser.AddSubContext;
 import antlr.ExprParser.AndContext;
 import antlr.ExprParser.AssignmentContext;
 import antlr.ExprParser.BooleanContext;
-import antlr.ExprParser.CompareEqualContext;
+import antlr.ExprParser.ComparisonContext;
 import antlr.ExprParser.DeclarationContext;
+import antlr.ExprParser.EqualityContext;
 import antlr.ExprParser.MultDivModContext;
 import antlr.ExprParser.NotContext;
 import antlr.ExprParser.NumberContext;
@@ -158,9 +159,19 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 	}
 
 	@Override
-	public Expression visitCompareEqual(CompareEqualContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitCompareEqual(ctx);
+	public Expression visitComparison(ComparisonContext ctx) {
+		Expression left = visit(ctx.getChild(0));
+		Expression right = visit(ctx.getChild(2));
+		String operator = ctx.getChild(1).getText();
+		return new Comparison(left, right, operator);
+	}
+
+	@Override
+	public Expression visitEquality(EqualityContext ctx) {
+		Expression left = visit(ctx.getChild(0));
+		Expression right = visit(ctx.getChild(2));
+		String operator = ctx.getChild(1).getText();
+		return new Equality(left, right, operator);
 	}
 
 	@Override

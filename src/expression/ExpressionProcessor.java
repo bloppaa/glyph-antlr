@@ -174,6 +174,45 @@ public class ExpressionProcessor {
 				String error = String.format("Error: cannot apply '!' to non-boolean");
 				throw new Error(error);
 			}
+		} else if (e instanceof Equality) {
+			Equality eq = (Equality) e;
+			Object left = getEvalResult(eq.left);
+			Object right = getEvalResult(eq.right);
+			String operator = eq.operator;
+
+			switch (operator) {
+				case "==":
+					result = left.equals(right);
+					break;
+				case "!=":
+					result = !left.equals(right);
+					break;
+			}
+		} else if (e instanceof Comparison) {
+			Comparison comp = (Comparison) e;
+			Object left = getEvalResult(comp.left);
+			Object right = getEvalResult(comp.right);
+			String operator = comp.operator;
+
+			if (left instanceof Double && right instanceof Double) {
+				switch (operator) {
+					case "<":
+						result = (double) left < (double) right;
+						break;
+					case ">":
+						result = (double) left > (double) right;
+						break;
+					case "<=":
+						result = (double) left <= (double) right;
+						break;
+					case ">=":
+						result = (double) left >= (double) right;
+						break;
+				}
+			} else {
+				String error = String.format("Error: cannot apply '%s' to non-numbers", operator);
+				throw new Error(error);
+			}
 		}
 		return result;
 	}

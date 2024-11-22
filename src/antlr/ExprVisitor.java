@@ -69,6 +69,13 @@ public interface ExprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAddSub(ExprParser.AddSubContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code Comparison}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitComparison(ExprParser.ComparisonContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code Parens}
 	 * labeled alternative in {@link ExprParser#expr}.
 	 * @param ctx the parse tree
@@ -97,17 +104,17 @@ public interface ExprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitUnaryMinus(ExprParser.UnaryMinusContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code Equality}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitEquality(ExprParser.EqualityContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code Boolean}
 	 * labeled alternative in {@link ExprParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitBoolean(ExprParser.BooleanContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code CompareEqual}
-	 * labeled alternative in {@link ExprParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCompareEqual(ExprParser.CompareEqualContext ctx);
 }
