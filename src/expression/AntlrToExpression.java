@@ -9,10 +9,15 @@ import org.antlr.v4.runtime.Token;
 
 import antlr.ExprBaseVisitor;
 import antlr.ExprParser.AddSubContext;
+import antlr.ExprParser.AndContext;
 import antlr.ExprParser.AssignmentContext;
+import antlr.ExprParser.BooleanContext;
+import antlr.ExprParser.CompareEqualContext;
 import antlr.ExprParser.DeclarationContext;
 import antlr.ExprParser.MultDivModContext;
+import antlr.ExprParser.NotContext;
 import antlr.ExprParser.NumberContext;
+import antlr.ExprParser.OrContext;
 import antlr.ExprParser.ParensContext;
 import antlr.ExprParser.UnaryMinusContext;
 import antlr.ExprParser.VariableContext;
@@ -108,6 +113,37 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 		}
 
 		return new UnaryMinus(expr);
+	}
+
+	@Override
+	public Expression visitAnd(AndContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitAnd(ctx);
+	}
+
+	@Override
+	public Expression visitBoolean(BooleanContext ctx) {
+		String text = ctx.BOOL().getText();
+		boolean value = text.equals("true") ? true : false;
+		return new Boolean(value);
+	}
+
+	@Override
+	public Expression visitCompareEqual(CompareEqualContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitCompareEqual(ctx);
+	}
+
+	@Override
+	public Expression visitNot(NotContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitNot(ctx);
+	}
+
+	@Override
+	public Expression visitOr(OrContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitOr(ctx);
 	}
 
 	@Override

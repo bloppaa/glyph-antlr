@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class ExpressionProcessor {
 	List<Expression> list;
-	public Map<String, Double> values;
+	public Map<String, Object> values;
 	public Map<String, String> types;
 
 	public ExpressionProcessor(List<Expression> list) {
@@ -23,32 +23,45 @@ public class ExpressionProcessor {
 			Expression e = list.get(i);
 			if (e instanceof VariableDeclaration) {
 				VariableDeclaration decl = (VariableDeclaration) e;
-				double result = getEvalResult(decl.expr);
-				boolean isInt = result % 1 == 0;
+				Object result = getEvalResult(decl.expr);
 
-				if (decl.type.equals("int") && !isInt) {
-					throw new IllegalArgumentException("Error: cannot assign float to an int variable");
+				if (result instanceof Double) {
+					boolean isInt = ((double) result) % 1 == 0;
+
+					if (decl.type.equals("int") && !isInt) {
+						throw new IllegalArgumentException("Error: cannot assign float to an int variable");
+					}
 				}
 
-				values.put(decl.id, isInt ? (int) result : result);
+				values.put(decl.id, result);
 				types.put(decl.id, decl.type);
 			} else if (e instanceof Assignment) {
 				Assignment assign = (Assignment) e;
-				double result = getEvalResult(assign.expr);
-				boolean isInt = result % 1 == 0;
+				Object result = getEvalResult(assign.expr);
 
-				if (types.get(assign.id).equals("int") && !isInt) {
-					throw new IllegalArgumentException(String.format(
-							"Error: cannot assign float '%s' to int variable '%s'", result, assign.id));
+				if (result instanceof Double) {
+					boolean isInt = ((double) result) % 1 == 0;
+
+					if (types.get(assign.id).equals("int") && !isInt) {
+						throw new IllegalArgumentException(String.format(
+								"Error: cannot assign float '%s' to int variable '%s'", result, assign.id));
+					}
 				}
 
-				values.put(assign.id, isInt ? (int) result : result);
+				values.put(assign.id, result);
 			} else {
 				// TODO: debugging purposes. Remove later
 				String input = e.toString();
-				double result = getEvalResult(e);
-				boolean isInt = result % 1 == 0;
-				String stringResult = isInt ? String.valueOf((int) result) : String.valueOf(result);
+				Object result = getEvalResult(e);
+				String stringResult;
+
+				if (result instanceof Double) {
+					boolean isInt = (double) result % 1 == 0;
+					stringResult = isInt ? String.valueOf((int) (double) result) : String.valueOf(result);
+				} else {
+					stringResult = String.valueOf(result);
+				}
+
 				evaluations.add(input + " is " + stringResult);
 			}
 		}
@@ -56,8 +69,8 @@ public class ExpressionProcessor {
 		return evaluations;
 	}
 
-	private double getEvalResult(Expression e) {
-		double result = 0;
+	private Object getEvalResult(Expression e) {
+		Object result = null;
 
 		if (e instanceof Number) {
 			Number num = (Number) e;
@@ -70,38 +83,42 @@ public class ExpressionProcessor {
 			result = getEvalResult(parens.expr);
 		} else if (e instanceof AddSub) {
 			AddSub add = (AddSub) e;
-			double left = getEvalResult(add.left);
-			double right = getEvalResult(add.right);
+			Object left = getEvalResult(add.left);
+			Object right = getEvalResult(add.right);
 			switch (add.operator) {
 				case "+":
-					result = left + right;
+					result = (double) left + (double) right;
 					break;
 				case "-":
-					result = left - right;
+					result = (double) left - (double) right;
 					break;
 			}
 		} else if (e instanceof MultDivMod) {
 			MultDivMod mult = (MultDivMod) e;
-			double left = getEvalResult(mult.left);
-			double right = getEvalResult(mult.right);
+			Object left = getEvalResult(mult.left);
+			Object right = getEvalResult(mult.right);
 			switch (mult.operator) {
 				case "*":
-					result = left * right;
+					result = (double) left * (double) right;
 					break;
 				case "/":
-					if (right == 0) {
+					if ((double) right == 0) {
 						throw new IllegalArgumentException("Error: division by zero");
 					}
-					result = left / right;
+					result = (double) left / (double) right;
 					break;
 				case "%":
-					result = left % right;
+					result = (double) left % (double) right;
 					break;
 			}
 		} else if (e instanceof UnaryMinus) {
 			UnaryMinus unary = (UnaryMinus) e;
-			double expr = getEvalResult(unary.expr);
-			result = -expr;
+			Object expr = getEvalResult(unary.expr);
+			result = -((double) expr);
+		} else if (e instanceof Boolean) {
+			Boolean bool = (Boolean) e;
+			result = bool.value;
+
 		}
 		return result;
 	}
