@@ -6,7 +6,7 @@ package antlr;
 
 prog: ((decl | expr | assign) ';')+ EOF # Program;
 
-decl: (INT_TYPE | FLOAT_TYPE | BOOL_TYPE) ID '=' expr # Declaration;
+decl: (INT_TYPE | FLOAT_TYPE | BOOL_TYPE | STR_TYPE) ID '=' expr # Declaration;
 
 assign: ID '=' expr # Assignment;
 
@@ -22,13 +22,16 @@ expr:
 	| expr '||' expr						# Or
 	| ID									# Variable
 	| NUM									# Number
-	| BOOL									# Boolean;
+	| BOOL									# Boolean
+	| STR									# String;
 
 INT_TYPE: 'int';
 FLOAT_TYPE: 'float';
 BOOL_TYPE: 'bool';
-BOOL: 'true' | 'false';
-ID: [a-z][a-zA-Z0-9_]*;
+STR_TYPE: 'string';
 NUM: ('0' | [1-9][0-9]*) ('.' [0-9]+)?;
+BOOL: 'true' | 'false';
+STR: '"' .*? '"';
+ID: [a-z][a-zA-Z0-9_]*;
 WS: [ \t\n\r]+ -> skip;
 COMMENT: '//' ~[\r\n]* -> skip;

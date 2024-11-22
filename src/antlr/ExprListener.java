@@ -46,18 +46,6 @@ public interface ExprListener extends ParseTreeListener {
 	 */
 	void exitAssignment(ExprParser.AssignmentContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code Not}
-	 * labeled alternative in {@link ExprParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterNot(ExprParser.NotContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code Not}
-	 * labeled alternative in {@link ExprParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitNot(ExprParser.NotContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code Variable}
 	 * labeled alternative in {@link ExprParser#expr}.
 	 * @param ctx the parse tree
@@ -82,18 +70,6 @@ public interface ExprListener extends ParseTreeListener {
 	 */
 	void exitOr(ExprParser.OrContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code Number}
-	 * labeled alternative in {@link ExprParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterNumber(ExprParser.NumberContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code Number}
-	 * labeled alternative in {@link ExprParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitNumber(ExprParser.NumberContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code AddSub}
 	 * labeled alternative in {@link ExprParser#expr}.
 	 * @param ctx the parse tree
@@ -106,18 +82,6 @@ public interface ExprListener extends ParseTreeListener {
 	 */
 	void exitAddSub(ExprParser.AddSubContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code Comparison}
-	 * labeled alternative in {@link ExprParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterComparison(ExprParser.ComparisonContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code Comparison}
-	 * labeled alternative in {@link ExprParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitComparison(ExprParser.ComparisonContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code Parens}
 	 * labeled alternative in {@link ExprParser#expr}.
 	 * @param ctx the parse tree
@@ -129,6 +93,66 @@ public interface ExprListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParens(ExprParser.ParensContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code UnaryMinus}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnaryMinus(ExprParser.UnaryMinusContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code UnaryMinus}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnaryMinus(ExprParser.UnaryMinusContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code String}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterString(ExprParser.StringContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code String}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitString(ExprParser.StringContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Not}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterNot(ExprParser.NotContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Not}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitNot(ExprParser.NotContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Number}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumber(ExprParser.NumberContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Number}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumber(ExprParser.NumberContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Comparison}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterComparison(ExprParser.ComparisonContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Comparison}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitComparison(ExprParser.ComparisonContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code MultDivMod}
 	 * labeled alternative in {@link ExprParser#expr}.
@@ -153,18 +177,6 @@ public interface ExprListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAnd(ExprParser.AndContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code UnaryMinus}
-	 * labeled alternative in {@link ExprParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterUnaryMinus(ExprParser.UnaryMinusContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code UnaryMinus}
-	 * labeled alternative in {@link ExprParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitUnaryMinus(ExprParser.UnaryMinusContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code Equality}
 	 * labeled alternative in {@link ExprParser#expr}.

@@ -34,13 +34,6 @@ public interface ExprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssignment(ExprParser.AssignmentContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code Not}
-	 * labeled alternative in {@link ExprParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNot(ExprParser.NotContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code Variable}
 	 * labeled alternative in {@link ExprParser#expr}.
 	 * @param ctx the parse tree
@@ -55,13 +48,6 @@ public interface ExprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitOr(ExprParser.OrContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code Number}
-	 * labeled alternative in {@link ExprParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNumber(ExprParser.NumberContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code AddSub}
 	 * labeled alternative in {@link ExprParser#expr}.
 	 * @param ctx the parse tree
@@ -69,19 +55,47 @@ public interface ExprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAddSub(ExprParser.AddSubContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code Comparison}
-	 * labeled alternative in {@link ExprParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitComparison(ExprParser.ComparisonContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code Parens}
 	 * labeled alternative in {@link ExprParser#expr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitParens(ExprParser.ParensContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code UnaryMinus}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnaryMinus(ExprParser.UnaryMinusContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code String}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitString(ExprParser.StringContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Not}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNot(ExprParser.NotContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Number}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumber(ExprParser.NumberContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Comparison}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitComparison(ExprParser.ComparisonContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code MultDivMod}
 	 * labeled alternative in {@link ExprParser#expr}.
@@ -96,13 +110,6 @@ public interface ExprVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAnd(ExprParser.AndContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code UnaryMinus}
-	 * labeled alternative in {@link ExprParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitUnaryMinus(ExprParser.UnaryMinusContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Equality}
 	 * labeled alternative in {@link ExprParser#expr}.

@@ -75,6 +75,9 @@ public class ExpressionProcessor {
 		if (e instanceof Number) {
 			Number num = (Number) e;
 			result = num.num;
+		} else if (e instanceof Str) {
+			Str str = (Str) e;
+			result = str.value;
 		} else if (e instanceof Variable) {
 			Variable var = (Variable) e;
 			result = values.get(var.id);
@@ -96,6 +99,8 @@ public class ExpressionProcessor {
 						result = (double) left - (double) right;
 						break;
 				}
+			} else if (left instanceof String && right instanceof String && operator.equals("+")) {
+				result = (String) left + (String) right;
 			} else {
 				String error = String.format("Error: cannot apply '%s' to non-numbers", operator);
 				throw new Error(error);

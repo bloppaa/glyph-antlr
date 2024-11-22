@@ -20,6 +20,7 @@ import antlr.ExprParser.NotContext;
 import antlr.ExprParser.NumberContext;
 import antlr.ExprParser.OrContext;
 import antlr.ExprParser.ParensContext;
+import antlr.ExprParser.StringContext;
 import antlr.ExprParser.UnaryMinusContext;
 import antlr.ExprParser.VariableContext;
 
@@ -156,6 +157,13 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 		String text = ctx.BOOL().getText();
 		boolean value = text.equals("true") ? true : false;
 		return new Bool(value);
+	}
+
+	@Override
+	public Expression visitString(StringContext ctx) {
+		String text = ctx.STR().getText();
+		String value = text.substring(1, text.length() - 1);
+		return new Str(value);
 	}
 
 	@Override
