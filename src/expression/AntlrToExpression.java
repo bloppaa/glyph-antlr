@@ -53,7 +53,7 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 			if (type.equals("int") && !num.isInt) {
 				String value = String.valueOf(num.num);
 				String error = String.format(
-						"Error: cannot assign float %s to int (line %d, column %d)", value, line, column);
+						"Error: cannot assign float %s to int (%d:%d)", value, line, column);
 				semanticErrors.add(error);
 			}
 		}
@@ -82,7 +82,7 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 			if (type.equals("int") && !num.isInt) {
 				String value = String.valueOf(num.num);
 				String error = String.format(
-						"Error: cannot assign float %s to int (line %d, column %d)", value, line, column);
+						"Error: cannot assign float %s to int (%d:%d)", value, line, column);
 				semanticErrors.add(error);
 			}
 		}

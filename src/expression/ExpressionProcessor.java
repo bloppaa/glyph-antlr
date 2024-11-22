@@ -47,7 +47,9 @@ public class ExpressionProcessor {
 				// TODO: debugging purposes. Remove later
 				String input = e.toString();
 				double result = getEvalResult(e);
-				evaluations.add(input + " is " + result);
+				boolean isInt = result % 1 == 0;
+				String stringResult = isInt ? String.valueOf((int) result) : String.valueOf(result);
+				evaluations.add(input + " is " + stringResult);
 			}
 		}
 
