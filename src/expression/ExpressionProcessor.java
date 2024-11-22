@@ -16,39 +16,49 @@ public class ExpressionProcessor {
 		types = new HashMap<>();
 	}
 
+	private void addDeclaration(Expression e) {
+		VariableDeclaration decl = (VariableDeclaration) e;
+		Object result = getEvalResult(decl.expr);
+
+		if (result instanceof Double) {
+			boolean isInt = ((double) result) % 1 == 0;
+
+			if (decl.type.equals("int") && !isInt) {
+				throw new IllegalArgumentException("Error: cannot assign float to an int variable");
+			}
+		}
+
+		values.put(decl.id, result);
+		types.put(decl.id, decl.type);
+	}
+
+	private void addAssignment(Expression e) {
+		Assignment assign = (Assignment) e;
+		Object result = getEvalResult(assign.expr);
+
+		if (result instanceof Double) {
+			boolean isInt = ((double) result) % 1 == 0;
+
+			if (types.get(assign.id).equals("int") && !isInt) {
+				throw new IllegalArgumentException(String.format(
+						"Error: cannot assign float '%s' to int variable '%s'", result, assign.id));
+			}
+		}
+
+		values.put(assign.id, result);
+	}
+
 	public List<String> getEvaluationResults() {
 		List<String> evaluations = new ArrayList<String>();
 
 		for (int i = 0; i < list.size(); i++) {
 			Expression e = list.get(i);
 			if (e instanceof VariableDeclaration) {
-				VariableDeclaration decl = (VariableDeclaration) e;
-				Object result = getEvalResult(decl.expr);
-
-				if (result instanceof Double) {
-					boolean isInt = ((double) result) % 1 == 0;
-
-					if (decl.type.equals("int") && !isInt) {
-						throw new IllegalArgumentException("Error: cannot assign float to an int variable");
-					}
-				}
-
-				values.put(decl.id, result);
-				types.put(decl.id, decl.type);
+				addDeclaration(e);
 			} else if (e instanceof Assignment) {
-				Assignment assign = (Assignment) e;
-				Object result = getEvalResult(assign.expr);
-
-				if (result instanceof Double) {
-					boolean isInt = ((double) result) % 1 == 0;
-
-					if (types.get(assign.id).equals("int") && !isInt) {
-						throw new IllegalArgumentException(String.format(
-								"Error: cannot assign float '%s' to int variable '%s'", result, assign.id));
-					}
-				}
-
-				values.put(assign.id, result);
+				addAssignment(e);
+			} else if (e instanceof Conditional) {
+				processConditional((Conditional) e);
 			} else {
 				// TODO: debugging purposes. Remove later
 				String input = e.toString();
@@ -220,5 +230,34 @@ public class ExpressionProcessor {
 			}
 		}
 		return result;
+	}
+
+	private void processConditional(Conditional cond) {
+		boolean condition = (boolean) getEvalResult(cond.condition);
+
+		if (condition) {
+			Block ifBlock = (Block) cond.ifBlock;
+			for (Expression e : ifBlock.getStatements()) {
+				if (e instanceof Assignment) {
+					addAssignment(e);
+				} else if (e instanceof VariableDeclaration) {
+					addDeclaration(e);
+				} else {
+					// TODO: debugging purposes. Remove later
+					String input = e.toString();
+					Object result = getEvalResult(e);
+					String stringResult;
+
+					if (result instanceof Double) {
+						boolean isInt = (double) result % 1 == 0;
+						stringResult = isInt ? String.valueOf((int) (double) result) : String.valueOf(result);
+					} else {
+						stringResult = String.valueOf(result);
+					}
+
+					System.out.println(input + " is " + stringResult);
+				}
+			}
+		}
 	}
 }
