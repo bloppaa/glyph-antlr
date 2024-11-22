@@ -34,6 +34,25 @@ public interface ExprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssignment(ExprParser.AssignmentContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code Condition}
+	 * labeled alternative in {@link ExprParser#cond}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondition(ExprParser.ConditionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExprParser#block}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlock(ExprParser.BlockContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExprParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStatement(ExprParser.StatementContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code Variable}
 	 * labeled alternative in {@link ExprParser#expr}.
 	 * @param ctx the parse tree

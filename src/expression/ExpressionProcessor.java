@@ -19,7 +19,7 @@ public class ExpressionProcessor {
 	public List<String> getEvaluationResults() {
 		List<String> evaluations = new ArrayList<String>();
 
-		for (int i = 0; i < list.size(); i += 2) {
+		for (int i = 0; i < list.size(); i++) {
 			Expression e = list.get(i);
 			if (e instanceof VariableDeclaration) {
 				VariableDeclaration decl = (VariableDeclaration) e;

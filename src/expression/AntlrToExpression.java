@@ -6,13 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 import antlr.ExprBaseVisitor;
 import antlr.ExprParser.AddSubContext;
 import antlr.ExprParser.AndContext;
 import antlr.ExprParser.AssignmentContext;
+import antlr.ExprParser.BlockContext;
 import antlr.ExprParser.BooleanContext;
 import antlr.ExprParser.ComparisonContext;
+import antlr.ExprParser.ConditionContext;
 import antlr.ExprParser.DeclarationContext;
 import antlr.ExprParser.EqualityContext;
 import antlr.ExprParser.MultDivModContext;
@@ -20,6 +23,7 @@ import antlr.ExprParser.NotContext;
 import antlr.ExprParser.NumberContext;
 import antlr.ExprParser.OrContext;
 import antlr.ExprParser.ParensContext;
+import antlr.ExprParser.StatementContext;
 import antlr.ExprParser.StringContext;
 import antlr.ExprParser.UnaryMinusContext;
 import antlr.ExprParser.VariableContext;
@@ -238,6 +242,43 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 		boolean isInt = !text.contains(".");
 		double num = Double.parseDouble(text);
 		return new Number(num, isInt);
+	}
+
+	@Override
+	public Expression visitStatement(StatementContext ctx) {
+		if (ctx.decl() != null) {
+			return visit(ctx.decl());
+		}
+		if (ctx.assign() != null) {
+			return visit(ctx.assign());
+		}
+		if (ctx.cond() != null) {
+			return visit(ctx.cond());
+		}
+		if (ctx.expr() != null) {
+			return visit(ctx.expr());
+		}
+		return null;
+	}
+
+	@Override
+	public Expression visitBlock(BlockContext ctx) {
+		Block block = new Block();
+
+		for (int i = 0; i < ctx.getChildCount(); i++) {
+			Expression e = visit(ctx.getChild(i));
+			block.addStatement(e);
+		}
+
+		return block;
+	}
+
+	@Override
+	public Expression visitCondition(ConditionContext ctx) {
+		Expression condition = visit(ctx.expr());
+		Expression ifBlock = visit(ctx.block());
+
+		return new Conditional(condition, ifBlock);
 	}
 
 }

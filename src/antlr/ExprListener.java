@@ -46,6 +46,38 @@ public interface ExprListener extends ParseTreeListener {
 	 */
 	void exitAssignment(ExprParser.AssignmentContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code Condition}
+	 * labeled alternative in {@link ExprParser#cond}.
+	 * @param ctx the parse tree
+	 */
+	void enterCondition(ExprParser.ConditionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Condition}
+	 * labeled alternative in {@link ExprParser#cond}.
+	 * @param ctx the parse tree
+	 */
+	void exitCondition(ExprParser.ConditionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ExprParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlock(ExprParser.BlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ExprParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlock(ExprParser.BlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ExprParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatement(ExprParser.StatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ExprParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatement(ExprParser.StatementContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code Variable}
 	 * labeled alternative in {@link ExprParser#expr}.
 	 * @param ctx the parse tree
