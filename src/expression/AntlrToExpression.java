@@ -44,7 +44,7 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
 		if (vars.contains(id)) {
 			String error = String.format(
-					"Error: variable %s already declared (%d:%d)", id, line, column);
+					"Error: variable '%s' already declared (%d:%d)", id, line, column);
 			semanticErrors.add(error);
 		} else {
 			vars.add(id);
@@ -53,13 +53,27 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
 		Expression expr = visit(ctx.expr());
 
+		if (type.equals("bool") && expr instanceof Number) {
+			Number number = (Number) expr;
+			String numberValue = number.isInt ? String.valueOf((int) number.num) : String.valueOf(number.num);
+			String error = String.format(
+					"Error: cannot assign number '%s' to bool variable (%d:%d)", numberValue, line, column);
+			throw new Error(error);
+		}
+		if (type.equals("int") && expr instanceof Boolean) {
+			Boolean bool = (Boolean) expr;
+			String boolValue = bool.value ? "true" : "false";
+			String error = String.format(
+					"Error: cannot assign boolean '%s' to int variable (%d:%d)", boolValue, line, column);
+			throw new Error(error);
+		}
 		if (expr instanceof Number) {
 			Number num = (Number) expr;
 			if (type.equals("int") && !num.isInt) {
 				String value = String.valueOf(num.num);
 				String error = String.format(
-						"Error: cannot assign float %s to int (%d:%d)", value, line, column);
-				semanticErrors.add(error);
+						"Error: cannot assign float '%s' to int (%d:%d)", value, line, column);
+				throw new Error(error);
 			}
 		}
 
@@ -75,20 +89,34 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
 		if (!vars.contains(id)) {
 			String error = String.format(
-					"Error: variable %s not declared (%d:%d)", id, line, column);
-			semanticErrors.add(error);
+					"Error: variable '%s' not declared (%d:%d)", id, line, column);
+			throw new Error(error);
 		}
 
 		Expression expr = visit(ctx.expr());
 		String type = varTypes.get(id);
 
+		if (type.equals("bool") && expr instanceof Number) {
+			Number number = (Number) expr;
+			String numberValue = number.isInt ? String.valueOf((int) number.num) : String.valueOf(number.num);
+			String error = String.format(
+					"Error: cannot assign number '%s' to bool variable (%d:%d)", numberValue, line, column);
+			throw new Error(error);
+		}
+		if (type.equals("int") && expr instanceof Boolean) {
+			Boolean bool = (Boolean) expr;
+			String boolValue = bool.value ? "true" : "false";
+			String error = String.format(
+					"Error: cannot assign boolean '%s' to int variable (%d:%d)", boolValue, line, column);
+			throw new Error(error);
+		}
 		if (expr instanceof Number) {
 			Number num = (Number) expr;
 			if (type.equals("int") && !num.isInt) {
 				String value = String.valueOf(num.num);
 				String error = String.format(
-						"Error: cannot assign float %s to int (%d:%d)", value, line, column);
-				semanticErrors.add(error);
+						"Error: cannot assign float '%s' to int variable (%d:%d)", value, line, column);
+				throw new Error(error);
 			}
 		}
 
@@ -177,7 +205,7 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 		String id = ctx.ID().getText();
 		if (!vars.contains(id)) {
 			String error = String.format(
-					"Error: variable %s not declared (%d:%d)", id, line, column);
+					"Error: variable '%s' not declared (%d:%d)", id, line, column);
 			semanticErrors.add(error);
 		}
 		return new Variable(id);

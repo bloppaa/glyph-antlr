@@ -20,31 +20,33 @@ public class ExpressionApp {
 		if (args.length != 1) {
 			System.err.println("Usage: file name");
 		} else {
-			String fileName = args[0];
-			ExprParser parser = getParser(fileName);
+			try {
+				String fileName = args[0];
+				ExprParser parser = getParser(fileName);
 
-			ParseTree antlrAST = parser.prog();
+				ParseTree antlrAST = parser.prog();
 
-			if (SyntaxErrorListener.hasError) {
-				return;
-			}
+				if (SyntaxErrorListener.hasError) {
+					return;
+				}
 
-			AntlrToProgram progVisitor = new AntlrToProgram();
-			Program prog = progVisitor.visit(antlrAST);
+				AntlrToProgram progVisitor = new AntlrToProgram();
+				Program prog = progVisitor.visit(antlrAST);
 
-			if (progVisitor.semanticErrors.isEmpty()) {
-				try {
+				if (progVisitor.semanticErrors.isEmpty()) {
 					ExpressionProcessor ep = new ExpressionProcessor(prog.expressions);
 					for (String evaluation : ep.getEvaluationResults()) {
 						System.out.println(evaluation);
 					}
-				} catch (Exception e) {
-					System.err.println(e.getMessage());
+
+				} else {
+					for (String err : progVisitor.semanticErrors) {
+						System.err.println(err);
+					}
 				}
-			} else {
-				for (String err : progVisitor.semanticErrors) {
-					System.err.println(err);
-				}
+			} catch (Error e) {
+				System.err.println(e.getMessage());
+				return;
 			}
 		}
 	}
