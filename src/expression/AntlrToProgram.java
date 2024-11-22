@@ -16,7 +16,7 @@ public class AntlrToProgram extends ExprBaseVisitor<Program> {
 		Program prog = new Program();
 
 		semanticErrors = new ArrayList<String>();
-		AntlrToExpression exprVisitor = new AntlrToExpression(semanticErrors);
+		AntlrToExpression exprVisitor = new AntlrToExpression();
 
 		for (int i = 0; i < ctx.getChildCount() - 1; i++) {
 			ParseTree child = ctx.getChild(i);

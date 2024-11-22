@@ -1,10 +1,5 @@
 package expression;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.antlr.v4.runtime.Token;
 
 import antlr.ExprBaseVisitor;
@@ -28,15 +23,6 @@ import antlr.ExprParser.UnaryMinusContext;
 import antlr.ExprParser.VariableContext;
 
 public class AntlrToExpression extends ExprBaseVisitor<Expression> {
-	private List<String> vars;
-	private Map<String, String> varTypes;
-	private List<String> semanticErrors;
-
-	public AntlrToExpression(List<String> semanticErrors) {
-		vars = new ArrayList<>();
-		varTypes = new HashMap<>();
-		this.semanticErrors = semanticErrors;
-	}
 
 	@Override
 	public Expression visitDeclaration(DeclarationContext ctx) {
@@ -46,15 +32,6 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
 		String id = ctx.ID().getText();
 		String type = ctx.getChild(0).getText();
-
-		if (vars.contains(id)) {
-			String error = String.format(
-					"Error: variable '%s' already declared (%d:%d)", id, line, column);
-			semanticErrors.add(error);
-		} else {
-			vars.add(id);
-			varTypes.put(id, type);
-		}
 
 		Expression expr = visit(ctx.expr());
 
@@ -92,14 +69,8 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 		int line = idToken.getLine();
 		int column = idToken.getCharPositionInLine() + 1;
 
-		if (!vars.contains(id)) {
-			String error = String.format(
-					"Error: variable '%s' not declared (%d:%d)", id, line, column);
-			throw new Error(error);
-		}
-
 		Expression expr = visit(ctx.expr());
-		String type = varTypes.get(id);
+		String type = ctx.getChild(0).getText();
 
 		if (type.equals("bool") && expr instanceof Number) {
 			Number number = (Number) expr;
@@ -222,16 +193,7 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
 	@Override
 	public Expression visitVariable(VariableContext ctx) {
-		Token idToken = ctx.ID().getSymbol();
-		int line = idToken.getLine();
-		int column = idToken.getCharPositionInLine() + 1;
-
 		String id = ctx.ID().getText();
-		if (!vars.contains(id)) {
-			String error = String.format(
-					"Error: variable '%s' not declared (%d:%d)", id, line, column);
-			semanticErrors.add(error);
-		}
 		return new Variable(id);
 	}
 
@@ -275,9 +237,15 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 	@Override
 	public Expression visitCondition(ConditionContext ctx) {
 		Expression condition = visit(ctx.expr());
-		Expression ifBlock = visit(ctx.block());
+		Expression ifBlock = visit(ctx.block(0));
+		Expression elseBlock = null;
 
-		return new Conditional(condition, ifBlock);
+		if (ctx.block(1) != null) {
+			elseBlock = visit(ctx.block(1));
+			return new Conditional(condition, ifBlock, elseBlock);
+		}
+
+		return new Conditional(condition, ifBlock, elseBlock);
 	}
 
 }

@@ -250,32 +250,39 @@ public class ExpressionProcessor {
 		return result;
 	}
 
+	private void processBlock(Block block) {
+		for (Expression e : block.getStatements()) {
+			if (e instanceof Assignment) {
+				addAssignment(e);
+			} else if (e instanceof VariableDeclaration) {
+				addDeclaration(e);
+			} else {
+				// TODO: debugging purposes. Remove later
+				String input = e.toString();
+				Object result = getEvalResult(e);
+				String stringResult;
+
+				if (result instanceof Double) {
+					boolean isInt = (double) result % 1 == 0;
+					stringResult = isInt ? String.valueOf((int) (double) result) : String.valueOf(result);
+				} else {
+					stringResult = String.valueOf(result);
+				}
+
+				System.out.println(input + " is " + stringResult);
+			}
+		}
+	}
+
 	private void processConditional(Conditional cond) {
 		boolean condition = (boolean) getEvalResult(cond.condition);
 
 		if (condition) {
 			Block ifBlock = (Block) cond.ifBlock;
-			for (Expression e : ifBlock.getStatements()) {
-				if (e instanceof Assignment) {
-					addAssignment(e);
-				} else if (e instanceof VariableDeclaration) {
-					addDeclaration(e);
-				} else {
-					// TODO: debugging purposes. Remove later
-					String input = e.toString();
-					Object result = getEvalResult(e);
-					String stringResult;
-
-					if (result instanceof Double) {
-						boolean isInt = (double) result % 1 == 0;
-						stringResult = isInt ? String.valueOf((int) (double) result) : String.valueOf(result);
-					} else {
-						stringResult = String.valueOf(result);
-					}
-
-					System.out.println(input + " is " + stringResult);
-				}
-			}
+			processBlock(ifBlock);
+		} else if (cond.elseBlock != null) {
+			Block elseBlock = (Block) cond.elseBlock;
+			processBlock(elseBlock);
 		}
 	}
 }

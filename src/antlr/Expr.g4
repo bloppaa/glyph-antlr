@@ -10,7 +10,8 @@ decl: (INT_TYPE | FLOAT_TYPE | BOOL_TYPE | STR_TYPE) ID '=' expr # Declaration;
 
 assign: ID '=' expr # Assignment;
 
-cond: 'if' '(' expr ')' '{' block '}' # Condition;
+cond:
+	'if' '(' expr ')' '{' block '}' ('else' '{' block '}')? # Condition;
 
 block: statement*;
 
