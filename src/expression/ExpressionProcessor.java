@@ -18,6 +18,12 @@ public class ExpressionProcessor {
 
 	private void addDeclaration(Expression e) {
 		VariableDeclaration decl = (VariableDeclaration) e;
+
+		if (values.containsKey(decl.id)) {
+			String error = String.format("Error: variable '%s' already declared", decl.id);
+			throw new Error(error);
+		}
+
 		Object result = getEvalResult(decl.expr);
 
 		if (result instanceof Double) {
@@ -34,6 +40,12 @@ public class ExpressionProcessor {
 
 	private void addAssignment(Expression e) {
 		Assignment assign = (Assignment) e;
+
+		if (!values.containsKey(assign.id)) {
+			String error = String.format("Error: variable '%s' not declared", assign.id);
+			throw new Error(error);
+		}
+
 		Object result = getEvalResult(assign.expr);
 
 		if (result instanceof Double) {
@@ -59,8 +71,14 @@ public class ExpressionProcessor {
 				addAssignment(e);
 			} else if (e instanceof Conditional) {
 				processConditional((Conditional) e);
-			} else {
+			} else if (e instanceof Variable) {
 				// TODO: debugging purposes. Remove later
+				Variable var = (Variable) e;
+				if (!values.containsKey(var.id)) {
+					String error = String.format(
+							"Error: variable '%s' not declared", var.id);
+					throw new Error(error);
+				}
 				String input = e.toString();
 				Object result = getEvalResult(e);
 				String stringResult;
