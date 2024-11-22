@@ -1,9 +1,9 @@
 package expression;
 
-public class Boolean extends Expression {
+public class Bool extends Expression {
     public boolean value;
 
-    public Boolean(boolean value) {
+    public Bool(boolean value) {
         this.value = value;
     }
 

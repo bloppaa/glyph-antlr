@@ -60,8 +60,8 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 					"Error: cannot assign number '%s' to bool variable (%d:%d)", numberValue, line, column);
 			throw new Error(error);
 		}
-		if (type.equals("int") && expr instanceof Boolean) {
-			Boolean bool = (Boolean) expr;
+		if (type.equals("int") && expr instanceof Bool) {
+			Bool bool = (Bool) expr;
 			String boolValue = bool.value ? "true" : "false";
 			String error = String.format(
 					"Error: cannot assign boolean '%s' to int variable (%d:%d)", boolValue, line, column);
@@ -103,8 +103,8 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 					"Error: cannot assign number '%s' to bool variable (%d:%d)", numberValue, line, column);
 			throw new Error(error);
 		}
-		if (type.equals("int") && expr instanceof Boolean) {
-			Boolean bool = (Boolean) expr;
+		if (type.equals("int") && expr instanceof Bool) {
+			Bool bool = (Bool) expr;
 			String boolValue = bool.value ? "true" : "false";
 			String error = String.format(
 					"Error: cannot assign boolean '%s' to int variable (%d:%d)", boolValue, line, column);
@@ -136,7 +136,7 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
 				String error = String.format(
 						"Error: consecutive unary minus not allowed (%d:%d)", line, column);
-				semanticErrors.add(error);
+				throw new Error(error);
 			}
 		}
 
@@ -145,15 +145,16 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
 	@Override
 	public Expression visitAnd(AndContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitAnd(ctx);
+		Expression left = visit(ctx.getChild(0));
+		Expression right = visit(ctx.getChild(2));
+		return new And(left, right);
 	}
 
 	@Override
 	public Expression visitBoolean(BooleanContext ctx) {
 		String text = ctx.BOOL().getText();
 		boolean value = text.equals("true") ? true : false;
-		return new Boolean(value);
+		return new Bool(value);
 	}
 
 	@Override
@@ -164,14 +165,15 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
 	@Override
 	public Expression visitNot(NotContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitNot(ctx);
+		Expression expr = visit(ctx.expr());
+		return new Not(expr);
 	}
 
 	@Override
 	public Expression visitOr(OrContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitOr(ctx);
+		Expression left = visit(ctx.getChild(0));
+		Expression right = visit(ctx.getChild(2));
+		return new Or(left, right);
 	}
 
 	@Override

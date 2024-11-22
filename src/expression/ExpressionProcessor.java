@@ -85,40 +85,95 @@ public class ExpressionProcessor {
 			AddSub add = (AddSub) e;
 			Object left = getEvalResult(add.left);
 			Object right = getEvalResult(add.right);
-			switch (add.operator) {
-				case "+":
-					result = (double) left + (double) right;
-					break;
-				case "-":
-					result = (double) left - (double) right;
-					break;
+			String operator = add.operator;
+
+			if (left instanceof Double && right instanceof Double) {
+				switch (operator) {
+					case "+":
+						result = (double) left + (double) right;
+						break;
+					case "-":
+						result = (double) left - (double) right;
+						break;
+				}
+			} else {
+				String error = String.format("Error: cannot apply '%s' to non-numbers", operator);
+				throw new Error(error);
 			}
+
 		} else if (e instanceof MultDivMod) {
 			MultDivMod mult = (MultDivMod) e;
 			Object left = getEvalResult(mult.left);
 			Object right = getEvalResult(mult.right);
-			switch (mult.operator) {
-				case "*":
-					result = (double) left * (double) right;
-					break;
-				case "/":
-					if ((double) right == 0) {
-						throw new IllegalArgumentException("Error: division by zero");
-					}
-					result = (double) left / (double) right;
-					break;
-				case "%":
-					result = (double) left % (double) right;
-					break;
+			String operator = mult.operator;
+
+			if (left instanceof Double && right instanceof Double) {
+				switch (operator) {
+					case "*":
+						result = (double) left * (double) right;
+						break;
+					case "/":
+						if ((double) right == 0) {
+							throw new IllegalArgumentException("Error: division by zero");
+						}
+						result = (double) left / (double) right;
+						break;
+					case "%":
+						result = (double) left % (double) right;
+						break;
+				}
+			} else {
+				String error = String.format("Error: cannot apply '%s' to non-numbers", operator);
+				throw new Error(error);
 			}
+			;
+
 		} else if (e instanceof UnaryMinus) {
 			UnaryMinus unary = (UnaryMinus) e;
 			Object expr = getEvalResult(unary.expr);
-			result = -((double) expr);
-		} else if (e instanceof Boolean) {
-			Boolean bool = (Boolean) e;
+
+			if (expr instanceof Double) {
+				result = -((double) expr);
+			} else {
+				String error = String.format("Error: cannot apply '-' to non-number");
+				throw new Error(error);
+			}
+		} else if (e instanceof Bool) {
+			Bool bool = (Bool) e;
 			result = bool.value;
 
+		} else if (e instanceof And) {
+			And and = (And) e;
+			Object left = getEvalResult(and.left);
+			Object right = getEvalResult(and.right);
+
+			if (left instanceof Boolean && right instanceof Boolean) {
+				result = (boolean) left && (boolean) right;
+			} else {
+				String error = String.format("Error: cannot apply '&&' to non-boolean");
+				throw new Error(error);
+			}
+		} else if (e instanceof Or) {
+			Or or = (Or) e;
+			Object left = getEvalResult(or.left);
+			Object right = getEvalResult(or.right);
+
+			if (left instanceof Boolean && right instanceof Boolean) {
+				result = (boolean) left || (boolean) right;
+			} else {
+				String error = String.format("Error: cannot apply '||' to non-boolean");
+				throw new Error(error);
+			}
+		} else if (e instanceof Not) {
+			Not not = (Not) e;
+			Object expr = getEvalResult(not.expr);
+
+			if (expr instanceof Boolean) {
+				result = !((boolean) expr);
+			} else {
+				String error = String.format("Error: cannot apply '!' to non-boolean");
+				throw new Error(error);
+			}
 		}
 		return result;
 	}
