@@ -4,7 +4,7 @@ grammar Expr;
 package antlr;
 }
 
-prog: ((decl | expr | assign) ';' | cond)+ EOF # Program;
+prog: ((decl | expr | assign | print) ';' | cond)+ EOF # Program;
 
 decl: (INT_TYPE | FLOAT_TYPE | BOOL_TYPE | STR_TYPE) ID '=' expr # Declaration;
 
@@ -15,7 +15,9 @@ cond:
 
 block: statement*;
 
-statement: decl ';' | expr ';' | assign ';' | cond;
+print: 'print(' expr ')';
+
+statement: decl ';' | expr ';' | assign ';' | print ';' | cond;
 
 expr:
 	'(' expr ')'							# Parens

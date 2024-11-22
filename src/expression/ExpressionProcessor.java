@@ -71,7 +71,7 @@ public class ExpressionProcessor {
 				addAssignment(e);
 			} else if (e instanceof Conditional) {
 				processConditional((Conditional) e);
-			} else if (e instanceof Variable) {
+			} else if (e instanceof Print) {
 				// TODO: debugging purposes. Remove later
 				Variable var = (Variable) e;
 				if (!values.containsKey(var.id)) {
@@ -127,8 +127,10 @@ public class ExpressionProcessor {
 						result = (double) left - (double) right;
 						break;
 				}
-			} else if (left instanceof String && right instanceof String && operator.equals("+")) {
-				result = (String) left + (String) right;
+			} else if (operator.equals("+") && ((left instanceof String && right instanceof String) ||
+					(left instanceof Double && right instanceof String) ||
+					(left instanceof String && right instanceof Double))) {
+				result = left.toString() + right.toString();
 			} else {
 				String error = String.format("Error: cannot apply '%s' to non-numbers", operator);
 				throw new Error(error);
@@ -256,11 +258,10 @@ public class ExpressionProcessor {
 				addAssignment(e);
 			} else if (e instanceof VariableDeclaration) {
 				addDeclaration(e);
-			} else {
-				// TODO: debugging purposes. Remove later
-				String input = e.toString();
-				Object result = getEvalResult(e);
-				String stringResult;
+			} else if (e instanceof Print) {
+				Expression expr = ((Print) e).expr;
+				Object result = getEvalResult(expr);
+				String stringResult = result.toString();
 
 				if (result instanceof Double) {
 					boolean isInt = (double) result % 1 == 0;
@@ -269,7 +270,7 @@ public class ExpressionProcessor {
 					stringResult = String.valueOf(result);
 				}
 
-				System.out.println(input + " is " + stringResult);
+				System.out.println(stringResult);
 			}
 		}
 	}

@@ -17,6 +17,7 @@ import antlr.ExprParser.NotContext;
 import antlr.ExprParser.NumberContext;
 import antlr.ExprParser.OrContext;
 import antlr.ExprParser.ParensContext;
+import antlr.ExprParser.PrintContext;
 import antlr.ExprParser.StatementContext;
 import antlr.ExprParser.StringContext;
 import antlr.ExprParser.UnaryMinusContext;
@@ -219,7 +220,16 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 		if (ctx.expr() != null) {
 			return visit(ctx.expr());
 		}
+		if (ctx.print() != null) {
+			return visit(ctx.print());
+		}
 		return null;
+	}
+
+	@Override
+	public Expression visitPrint(PrintContext ctx) {
+		Expression expr = visit(ctx.expr());
+		return new Print(expr);
 	}
 
 	@Override
