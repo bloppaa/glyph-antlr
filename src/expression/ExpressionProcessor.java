@@ -76,6 +76,8 @@ public class ExpressionProcessor {
 				Object result = getEvalResult(expr);
 
 				System.out.println(result.toString());
+			} else if (e instanceof ForLoop) {
+				processForLoop((ForLoop) e);
 			}
 		}
 
@@ -311,6 +313,32 @@ public class ExpressionProcessor {
 		} else if (cond.elseBlock != null) {
 			Block elseBlock = (Block) cond.elseBlock;
 			processBlock(elseBlock);
+		}
+	}
+
+	private void processForLoop(ForLoop forLoop) {
+		String id = forLoop.id;
+
+		if (values.containsKey(id)) {
+			String error = String.format("Error: variable '%s' already declared", id);
+			throw new Error(error);
+		}
+
+		int start = (int) getEvalResult(forLoop.start);
+
+		values.put(id, start);
+		types.put(id, "int");
+
+		int end = (int) getEvalResult(forLoop.end);
+
+		// TODO: Check if end is less than start, or if step is negative
+
+		Block block = (Block) forLoop.block;
+		int step = (int) getEvalResult(forLoop.step);
+
+		for (int i = start; i <= end; i += step) {
+			processBlock(block);
+			values.put(id, i + step);
 		}
 	}
 }

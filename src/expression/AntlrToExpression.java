@@ -12,6 +12,7 @@ import antlr.ExprParser.ComparisonContext;
 import antlr.ExprParser.ConditionContext;
 import antlr.ExprParser.DeclarationContext;
 import antlr.ExprParser.EqualityContext;
+import antlr.ExprParser.ForLoopContext;
 import antlr.ExprParser.IntContext;
 import antlr.ExprParser.MultDivModContext;
 import antlr.ExprParser.NotContext;
@@ -245,4 +246,17 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 		return new Conditional(condition, ifBlock, elseBlock);
 	}
 
+	@Override
+	public Expression visitForLoop(ForLoopContext ctx) {
+		String id = ctx.ID().getText();
+		Expression start = visit(ctx.expr(0));
+		Expression end = visit(ctx.expr(1));
+		Expression block = visit(ctx.block());
+
+		if (ctx.expr(2) != null) {
+			Expression step = visit(ctx.expr(2));
+			return new ForLoop(id, start, end, step, block);
+		}
+		return new ForLoop(id, start, end, new Int(1), block);
+	}
 }
