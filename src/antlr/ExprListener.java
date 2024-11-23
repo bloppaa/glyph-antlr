@@ -160,6 +160,18 @@ public interface ExprListener extends ParseTreeListener {
 	 */
 	void exitString(ExprParser.StringContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code Int}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterInt(ExprParser.IntContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Int}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitInt(ExprParser.IntContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code Not}
 	 * labeled alternative in {@link ExprParser#expr}.
 	 * @param ctx the parse tree
@@ -171,18 +183,6 @@ public interface ExprListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNot(ExprParser.NotContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code Number}
-	 * labeled alternative in {@link ExprParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterNumber(ExprParser.NumberContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code Number}
-	 * labeled alternative in {@link ExprParser#expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitNumber(ExprParser.NumberContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code Comparison}
 	 * labeled alternative in {@link ExprParser#expr}.
@@ -219,6 +219,18 @@ public interface ExprListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAnd(ExprParser.AndContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Real}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterReal(ExprParser.RealContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Real}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitReal(ExprParser.RealContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code Equality}
 	 * labeled alternative in {@link ExprParser#expr}.

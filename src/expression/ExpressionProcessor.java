@@ -72,25 +72,10 @@ public class ExpressionProcessor {
 			} else if (e instanceof Conditional) {
 				processConditional((Conditional) e);
 			} else if (e instanceof Print) {
-				// TODO: debugging purposes. Remove later
-				Variable var = (Variable) e;
-				if (!values.containsKey(var.id)) {
-					String error = String.format(
-							"Error: variable '%s' not declared", var.id);
-					throw new Error(error);
-				}
-				String input = e.toString();
-				Object result = getEvalResult(e);
-				String stringResult;
+				Expression expr = ((Print) e).expr;
+				Object result = getEvalResult(expr);
 
-				if (result instanceof Double) {
-					boolean isInt = (double) result % 1 == 0;
-					stringResult = isInt ? String.valueOf((int) (double) result) : String.valueOf(result);
-				} else {
-					stringResult = String.valueOf(result);
-				}
-
-				evaluations.add(input + " is " + stringResult);
+				System.out.println(result.toString());
 			}
 		}
 
@@ -100,9 +85,12 @@ public class ExpressionProcessor {
 	private Object getEvalResult(Expression e) {
 		Object result = null;
 
-		if (e instanceof Number) {
-			Number num = (Number) e;
-			result = num.num;
+		if (e instanceof Int) {
+			Int num = (Int) e;
+			result = num.value;
+		} else if (e instanceof Real) {
+			Real num = (Real) e;
+			result = num.value;
 		} else if (e instanceof Str) {
 			Str str = (Str) e;
 			result = str.value;
@@ -127,9 +115,22 @@ public class ExpressionProcessor {
 						result = (double) left - (double) right;
 						break;
 				}
+			} else if (left instanceof Integer && right instanceof Integer) {
+				switch (operator) {
+					case "+":
+						result = (int) left + (int) right;
+						break;
+					case "-":
+						result = (int) left - (int) right;
+						break;
+				}
 			} else if (operator.equals("+") && ((left instanceof String && right instanceof String) ||
 					(left instanceof Double && right instanceof String) ||
 					(left instanceof String && right instanceof Double))) {
+				result = left.toString() + right.toString();
+			} else if (operator.equals("+") && ((left instanceof String && right instanceof String) ||
+					(left instanceof Integer && right instanceof String) ||
+					(left instanceof String && right instanceof Integer))) {
 				result = left.toString() + right.toString();
 			} else {
 				String error = String.format("Error: cannot apply '%s' to non-numbers", operator);
@@ -157,6 +158,21 @@ public class ExpressionProcessor {
 						result = (double) left % (double) right;
 						break;
 				}
+			} else if (left instanceof Integer && right instanceof Integer) {
+				switch (operator) {
+					case "*":
+						result = (int) left * (int) right;
+						break;
+					case "/":
+						if ((int) right == 0) {
+							throw new IllegalArgumentException("Error: division by zero");
+						}
+						result = (int) left / (int) right;
+						break;
+					case "%":
+						result = (int) left % (int) right;
+						break;
+				}
 			} else {
 				String error = String.format("Error: cannot apply '%s' to non-numbers", operator);
 				throw new Error(error);
@@ -169,6 +185,8 @@ public class ExpressionProcessor {
 
 			if (expr instanceof Double) {
 				result = -((double) expr);
+			} else if (expr instanceof Integer) {
+				result = -((int) expr);
 			} else {
 				String error = String.format("Error: cannot apply '-' to non-number");
 				throw new Error(error);
@@ -244,6 +262,21 @@ public class ExpressionProcessor {
 						result = (double) left >= (double) right;
 						break;
 				}
+			} else if (left instanceof Integer && right instanceof Integer) {
+				switch (operator) {
+					case "<":
+						result = (int) left < (int) right;
+						break;
+					case ">":
+						result = (int) left > (int) right;
+						break;
+					case "<=":
+						result = (int) left <= (int) right;
+						break;
+					case ">=":
+						result = (int) left >= (int) right;
+						break;
+				}
 			} else {
 				String error = String.format("Error: cannot apply '%s' to non-numbers", operator);
 				throw new Error(error);
@@ -261,16 +294,8 @@ public class ExpressionProcessor {
 			} else if (e instanceof Print) {
 				Expression expr = ((Print) e).expr;
 				Object result = getEvalResult(expr);
-				String stringResult = result.toString();
 
-				if (result instanceof Double) {
-					boolean isInt = (double) result % 1 == 0;
-					stringResult = isInt ? String.valueOf((int) (double) result) : String.valueOf(result);
-				} else {
-					stringResult = String.valueOf(result);
-				}
-
-				System.out.println(stringResult);
+				System.out.println(result.toString());
 			}
 		}
 	}

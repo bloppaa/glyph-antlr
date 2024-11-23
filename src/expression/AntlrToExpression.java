@@ -12,18 +12,42 @@ import antlr.ExprParser.ComparisonContext;
 import antlr.ExprParser.ConditionContext;
 import antlr.ExprParser.DeclarationContext;
 import antlr.ExprParser.EqualityContext;
+import antlr.ExprParser.IntContext;
 import antlr.ExprParser.MultDivModContext;
 import antlr.ExprParser.NotContext;
-import antlr.ExprParser.NumberContext;
 import antlr.ExprParser.OrContext;
 import antlr.ExprParser.ParensContext;
 import antlr.ExprParser.PrintContext;
+import antlr.ExprParser.RealContext;
 import antlr.ExprParser.StatementContext;
 import antlr.ExprParser.StringContext;
 import antlr.ExprParser.UnaryMinusContext;
 import antlr.ExprParser.VariableContext;
 
 public class AntlrToExpression extends ExprBaseVisitor<Expression> {
+
+	private void checkTypes(Expression expr, String type, int line, int column) {
+		if (type.equals("bool") && !(expr instanceof Bool)) {
+			String error = String.format(
+					"Error: cannot assign non-bool value to bool variable (%d:%d)", line, column);
+			throw new Error(error);
+		}
+		if (type.equals("int") && !(expr instanceof Int)) {
+			String error = String.format(
+					"Error: cannot assign non-integer value to int variable (%d:%d)", line, column);
+			throw new Error(error);
+		}
+		if (type.equals("float") && !(expr instanceof Real)) {
+			String error = String.format(
+					"Error: cannot assign non-float value to float variable (%d:%d)", line, column);
+			throw new Error(error);
+		}
+		if (type.equals("string") && !(expr instanceof Str)) {
+			String error = String.format(
+					"Error: cannot assign non-string value to string variable (%d:%d)", line, column);
+			throw new Error(error);
+		}
+	}
 
 	@Override
 	public Expression visitDeclaration(DeclarationContext ctx) {
@@ -36,29 +60,7 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
 		Expression expr = visit(ctx.expr());
 
-		if (type.equals("bool") && expr instanceof Number) {
-			Number number = (Number) expr;
-			String numberValue = number.isInt ? String.valueOf((int) number.num) : String.valueOf(number.num);
-			String error = String.format(
-					"Error: cannot assign number '%s' to bool variable (%d:%d)", numberValue, line, column);
-			throw new Error(error);
-		}
-		if (type.equals("int") && expr instanceof Bool) {
-			Bool bool = (Bool) expr;
-			String boolValue = bool.value ? "true" : "false";
-			String error = String.format(
-					"Error: cannot assign boolean '%s' to int variable (%d:%d)", boolValue, line, column);
-			throw new Error(error);
-		}
-		if (expr instanceof Number) {
-			Number num = (Number) expr;
-			if (type.equals("int") && !num.isInt) {
-				String value = String.valueOf(num.num);
-				String error = String.format(
-						"Error: cannot assign float '%s' to int (%d:%d)", value, line, column);
-				throw new Error(error);
-			}
-		}
+		checkTypes(expr, type, line, column);
 
 		return new VariableDeclaration(id, type, expr);
 	}
@@ -73,29 +75,7 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 		Expression expr = visit(ctx.expr());
 		String type = ctx.getChild(0).getText();
 
-		if (type.equals("bool") && expr instanceof Number) {
-			Number number = (Number) expr;
-			String numberValue = number.isInt ? String.valueOf((int) number.num) : String.valueOf(number.num);
-			String error = String.format(
-					"Error: cannot assign number '%s' to bool variable (%d:%d)", numberValue, line, column);
-			throw new Error(error);
-		}
-		if (type.equals("int") && expr instanceof Bool) {
-			Bool bool = (Bool) expr;
-			String boolValue = bool.value ? "true" : "false";
-			String error = String.format(
-					"Error: cannot assign boolean '%s' to int variable (%d:%d)", boolValue, line, column);
-			throw new Error(error);
-		}
-		if (expr instanceof Number) {
-			Number num = (Number) expr;
-			if (type.equals("int") && !num.isInt) {
-				String value = String.valueOf(num.num);
-				String error = String.format(
-						"Error: cannot assign float '%s' to int variable (%d:%d)", value, line, column);
-				throw new Error(error);
-			}
-		}
+		checkTypes(expr, type, line, column);
 
 		return new Assignment(id, expr);
 	}
@@ -106,7 +86,8 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
 		if (expr instanceof UnaryMinus) {
 			UnaryMinus innerMinus = (UnaryMinus) expr;
-			if (innerMinus.expr instanceof Number || innerMinus.expr instanceof Variable) {
+			if (innerMinus.expr instanceof Int || innerMinus.expr instanceof Real
+					|| innerMinus.expr instanceof Variable) {
 				Token token = ctx.start;
 				int line = token.getLine();
 				int column = token.getCharPositionInLine() + 1;
@@ -199,11 +180,17 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 	}
 
 	@Override
-	public Expression visitNumber(NumberContext ctx) {
-		String text = ctx.NUM().getText();
-		boolean isInt = !text.contains(".");
+	public Expression visitInt(IntContext ctx) {
+		String text = ctx.INT().getText();
+		int num = Integer.parseInt(text);
+		return new Int(num);
+	}
+
+	@Override
+	public Expression visitReal(RealContext ctx) {
+		String text = ctx.FLOAT().getText();
 		double num = Double.parseDouble(text);
-		return new Number(num, isInt);
+		return new Real(num);
 	}
 
 	@Override

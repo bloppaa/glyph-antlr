@@ -30,7 +30,8 @@ expr:
 	| expr '&&' expr						# And
 	| expr '||' expr						# Or
 	| ID									# Variable
-	| NUM									# Number
+	| INT									# Int
+	| FLOAT									# Real
 	| BOOL									# Boolean
 	| STR									# String;
 
@@ -38,7 +39,8 @@ INT_TYPE: 'int';
 FLOAT_TYPE: 'float';
 BOOL_TYPE: 'bool';
 STR_TYPE: 'string';
-NUM: ('0' | [1-9][0-9]*) ('.' [0-9]+)?;
+INT: '0' | [1-9][0-9]*;
+FLOAT: ('0' | [1-9][0-9]*) ('.' [0-9]+)?;
 BOOL: 'true' | 'false';
 STR: '"' .*? '"';
 ID: [a-z][a-zA-Z0-9_]*;
