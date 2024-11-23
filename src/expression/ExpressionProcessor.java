@@ -298,7 +298,9 @@ public class ExpressionProcessor {
 			if (e instanceof Assignment) {
 				addAssignment(e);
 			} else if (e instanceof VariableDeclaration) {
-				addDeclaration(e);
+				String error = String.format("Error: cannot declare variable '%s' inside code block",
+						((VariableDeclaration) e).id);
+				throw new Error(error);
 			} else if (e instanceof Print) {
 				Expression expr = ((Print) e).expr;
 				Object result = getEvalResult(expr);

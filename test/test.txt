@@ -1,6 +1,2 @@
-int sum = 0;
-from (i = 0 to 100) {
-    sum = sum + i;
-}
+// Print first 100 prime numbers;
 
-print(i);
