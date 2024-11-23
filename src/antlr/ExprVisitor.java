@@ -47,8 +47,7 @@ public interface ExprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlock(ExprParser.BlockContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ForLoop}
-	 * labeled alternative in {@link ExprParser#for}.
+	 * Visit a parse tree produced by {@link ExprParser#forLoop}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */

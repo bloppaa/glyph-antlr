@@ -300,6 +300,8 @@ public class ExpressionProcessor {
 				System.out.println(result.toString());
 			} else if (e instanceof Conditional) {
 				processConditional((Conditional) e);
+			} else if (e instanceof ForLoop) {
+				processForLoop((ForLoop) e);
 			}
 		}
 	}
@@ -326,9 +328,6 @@ public class ExpressionProcessor {
 
 		int start = (int) getEvalResult(forLoop.start);
 
-		values.put(id, start);
-		types.put(id, "int");
-
 		int end = (int) getEvalResult(forLoop.end);
 
 		// TODO: Check if end is less than start, or if step is negative
@@ -337,8 +336,9 @@ public class ExpressionProcessor {
 		int step = (int) getEvalResult(forLoop.step);
 
 		for (int i = start; i <= end; i += step) {
+			values.put(id, i);
 			processBlock(block);
-			values.put(id, i + step);
+			values.remove(id);
 		}
 	}
 }

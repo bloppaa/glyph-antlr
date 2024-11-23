@@ -211,6 +211,9 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 		if (ctx.print() != null) {
 			return visit(ctx.print());
 		}
+		if (ctx.forLoop() != null) {
+			return visit(ctx.forLoop());
+		}
 		return null;
 	}
 

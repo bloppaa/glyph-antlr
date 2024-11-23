@@ -84,7 +84,7 @@ decl
 assign
 cond
 block
-for
+forLoop
 print
 statement
 expr

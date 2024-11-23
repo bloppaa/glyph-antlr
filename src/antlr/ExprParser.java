@@ -26,10 +26,10 @@ public class ExprParser extends Parser {
 		INT=31, FLOAT=32, BOOL=33, STR=34, ID=35, WS=36, COMMENT=37;
 	public static final int
 		RULE_prog = 0, RULE_decl = 1, RULE_assign = 2, RULE_cond = 3, RULE_block = 4, 
-		RULE_for = 5, RULE_print = 6, RULE_statement = 7, RULE_expr = 8;
+		RULE_forLoop = 5, RULE_print = 6, RULE_statement = 7, RULE_expr = 8;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"prog", "decl", "assign", "cond", "block", "for", "print", "statement", 
+			"prog", "decl", "assign", "cond", "block", "forLoop", "print", "statement", 
 			"expr"
 		};
 	}
@@ -148,11 +148,11 @@ public class ExprParser extends Parser {
 		public CondContext cond(int i) {
 			return getRuleContext(CondContext.class,i);
 		}
-		public List<ForContext> for_() {
-			return getRuleContexts(ForContext.class);
+		public List<ForLoopContext> forLoop() {
+			return getRuleContexts(ForLoopContext.class);
 		}
-		public ForContext for_(int i) {
-			return getRuleContext(ForContext.class,i);
+		public ForLoopContext forLoop(int i) {
+			return getRuleContext(ForLoopContext.class,i);
 		}
 		public ProgramContext(ProgContext ctx) { copyFrom(ctx); }
 		@Override
@@ -247,7 +247,7 @@ public class ExprParser extends Parser {
 					case T__8:
 						{
 						setState(27);
-						for_();
+						forLoop();
 						}
 						break;
 					default:
@@ -565,19 +565,7 @@ public class ExprParser extends Parser {
 	}
 
 	@SuppressWarnings("CheckReturnValue")
-	public static class ForContext extends ParserRuleContext {
-		public ForContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_for; }
-	 
-		public ForContext() { }
-		public void copyFrom(ForContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	@SuppressWarnings("CheckReturnValue")
-	public static class ForLoopContext extends ForContext {
+	public static class ForLoopContext extends ParserRuleContext {
 		public TerminalNode ID() { return getToken(ExprParser.ID, 0); }
 		public List<ExprContext> expr() {
 			return getRuleContexts(ExprContext.class);
@@ -588,7 +576,10 @@ public class ExprParser extends Parser {
 		public BlockContext block() {
 			return getRuleContext(BlockContext.class,0);
 		}
-		public ForLoopContext(ForContext ctx) { copyFrom(ctx); }
+		public ForLoopContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_forLoop; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof ExprListener ) ((ExprListener)listener).enterForLoop(this);
@@ -604,12 +595,11 @@ public class ExprParser extends Parser {
 		}
 	}
 
-	public final ForContext for_() throws RecognitionException {
-		ForContext _localctx = new ForContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_for);
+	public final ForLoopContext forLoop() throws RecognitionException {
+		ForLoopContext _localctx = new ForLoopContext(_ctx, getState());
+		enterRule(_localctx, 10, RULE_forLoop);
 		int _la;
 		try {
-			_localctx = new ForLoopContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(65);
@@ -725,8 +715,8 @@ public class ExprParser extends Parser {
 		public CondContext cond() {
 			return getRuleContext(CondContext.class,0);
 		}
-		public ForContext for_() {
-			return getRuleContext(ForContext.class,0);
+		public ForLoopContext forLoop() {
+			return getRuleContext(ForLoopContext.class,0);
 		}
 		public StatementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -801,7 +791,7 @@ public class ExprParser extends Parser {
 				enterOuterAlt(_localctx, 6);
 				{
 				setState(98);
-				for_();
+				forLoop();
 				}
 				break;
 			}

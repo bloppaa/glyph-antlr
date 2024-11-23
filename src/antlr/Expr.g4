@@ -4,7 +4,7 @@ grammar Expr;
 package antlr;
 }
 
-prog: ((decl | expr | assign | print) ';' | (cond | for))+ EOF # Program;
+prog: ((decl | expr | assign | print) ';' | (cond | forLoop))+ EOF # Program;
 
 decl: (INT_TYPE | FLOAT_TYPE | BOOL_TYPE | STR_TYPE) ID '=' expr # Declaration;
 
@@ -15,8 +15,8 @@ cond:
 
 block: statement*;
 
-for:
-	'from' '(' ID '=' expr 'to' expr ('step' expr)? ')' '{' block '}' # ForLoop;
+forLoop:
+	'from' '(' ID '=' expr 'to' expr ('step' expr)? ')' '{' block '}';
 
 print: 'print(' expr ')';
 
@@ -26,7 +26,7 @@ statement:
 	| assign ';'
 	| print ';'
 	| cond
-	| for;
+	| forLoop;
 
 expr:
 	'(' expr ')'							# Parens
