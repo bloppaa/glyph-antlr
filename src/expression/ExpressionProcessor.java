@@ -296,6 +296,8 @@ public class ExpressionProcessor {
 				Object result = getEvalResult(expr);
 
 				System.out.println(result.toString());
+			} else if (e instanceof Conditional) {
+				processConditional((Conditional) e);
 			}
 		}
 	}
