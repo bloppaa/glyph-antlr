@@ -98,6 +98,12 @@ public class ExpressionProcessor {
 			result = str.value;
 		} else if (e instanceof Variable) {
 			Variable var = (Variable) e;
+
+			if (!values.containsKey(var.id)) {
+				String error = String.format("Error: variable '%s' not declared", var.id);
+				throw new Error(error);
+			}
+
 			result = values.get(var.id);
 		} else if (e instanceof Parens) {
 			Parens parens = (Parens) e;
