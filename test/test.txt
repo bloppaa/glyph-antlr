@@ -1,6 +1,3 @@
-int num = 0;
-
-while (num < 10) {
-    num = num + 1;
-    print(num);
+func f1() {
+    func f2() {}
 }

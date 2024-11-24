@@ -27,6 +27,12 @@ public interface ExprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDeclaration(ExprParser.DeclarationContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link ExprParser#type}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitType(ExprParser.TypeContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code Assignment}
 	 * labeled alternative in {@link ExprParser#assign}.
 	 * @param ctx the parse tree
@@ -46,6 +52,34 @@ public interface ExprVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBlock(ExprParser.BlockContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Function}
+	 * labeled alternative in {@link ExprParser#func}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunction(ExprParser.FunctionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Parameters}
+	 * labeled alternative in {@link ExprParser#params}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParameters(ExprParser.ParametersContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code FunctionCall}
+	 * labeled alternative in {@link ExprParser#call}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionCall(ExprParser.FunctionCallContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code Arguments}
+	 * labeled alternative in {@link ExprParser#args}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArguments(ExprParser.ArgumentsContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ExprParser#forLoop}.
 	 * @param ctx the parse tree

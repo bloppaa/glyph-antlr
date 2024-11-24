@@ -34,6 +34,16 @@ public interface ExprListener extends ParseTreeListener {
 	 */
 	void exitDeclaration(ExprParser.DeclarationContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link ExprParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void enterType(ExprParser.TypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ExprParser#type}.
+	 * @param ctx the parse tree
+	 */
+	void exitType(ExprParser.TypeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code Assignment}
 	 * labeled alternative in {@link ExprParser#assign}.
 	 * @param ctx the parse tree
@@ -67,6 +77,54 @@ public interface ExprListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBlock(ExprParser.BlockContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Function}
+	 * labeled alternative in {@link ExprParser#func}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunction(ExprParser.FunctionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Function}
+	 * labeled alternative in {@link ExprParser#func}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunction(ExprParser.FunctionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Parameters}
+	 * labeled alternative in {@link ExprParser#params}.
+	 * @param ctx the parse tree
+	 */
+	void enterParameters(ExprParser.ParametersContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Parameters}
+	 * labeled alternative in {@link ExprParser#params}.
+	 * @param ctx the parse tree
+	 */
+	void exitParameters(ExprParser.ParametersContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code FunctionCall}
+	 * labeled alternative in {@link ExprParser#call}.
+	 * @param ctx the parse tree
+	 */
+	void enterFunctionCall(ExprParser.FunctionCallContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code FunctionCall}
+	 * labeled alternative in {@link ExprParser#call}.
+	 * @param ctx the parse tree
+	 */
+	void exitFunctionCall(ExprParser.FunctionCallContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code Arguments}
+	 * labeled alternative in {@link ExprParser#args}.
+	 * @param ctx the parse tree
+	 */
+	void enterArguments(ExprParser.ArgumentsContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code Arguments}
+	 * labeled alternative in {@link ExprParser#args}.
+	 * @param ctx the parse tree
+	 */
+	void exitArguments(ExprParser.ArgumentsContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ExprParser#forLoop}.
 	 * @param ctx the parse tree
