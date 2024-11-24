@@ -78,6 +78,8 @@ public class ExpressionProcessor {
 				System.out.println(result.toString());
 			} else if (e instanceof ForLoop) {
 				processForLoop((ForLoop) e);
+			} else if (e instanceof WhileLoop) {
+				processWhileLoop((WhileLoop) e);
 			}
 		}
 
@@ -323,6 +325,17 @@ public class ExpressionProcessor {
 		} else if (cond.elseBlock != null) {
 			Block elseBlock = (Block) cond.elseBlock;
 			processBlock(elseBlock);
+		}
+	}
+
+	private void processWhileLoop(WhileLoop whileLoop) {
+		boolean condition = (boolean) getEvalResult(whileLoop.condition);
+
+		while (condition) {
+			Block block = (Block) whileLoop.block;
+			processBlock(block);
+
+			condition = (boolean) getEvalResult(whileLoop.condition);
 		}
 	}
 

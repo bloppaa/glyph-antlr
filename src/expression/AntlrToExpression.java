@@ -24,6 +24,7 @@ import antlr.ExprParser.StatementContext;
 import antlr.ExprParser.StringContext;
 import antlr.ExprParser.UnaryMinusContext;
 import antlr.ExprParser.VariableContext;
+import antlr.ExprParser.WhileLoopContext;
 
 public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
@@ -214,6 +215,9 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 		if (ctx.forLoop() != null) {
 			return visit(ctx.forLoop());
 		}
+		if (ctx.whileLoop() != null) {
+			return visit(ctx.whileLoop());
+		}
 		return null;
 	}
 
@@ -233,6 +237,13 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 		}
 
 		return block;
+	}
+
+	@Override
+	public Expression visitWhileLoop(WhileLoopContext ctx) {
+		Expression condition = visit(ctx.expr());
+		Expression block = visit(ctx.block());
+		return new WhileLoop(condition, block);
 	}
 
 	@Override
