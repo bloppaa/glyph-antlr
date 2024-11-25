@@ -47,12 +47,6 @@ public interface ExprVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCondition(ExprParser.ConditionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ExprParser#block}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBlock(ExprParser.BlockContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code Function}
 	 * labeled alternative in {@link ExprParser#func}.
 	 * @param ctx the parse tree
@@ -66,13 +60,6 @@ public interface ExprVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParameters(ExprParser.ParametersContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code FunctionCall}
-	 * labeled alternative in {@link ExprParser#call}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFunctionCall(ExprParser.FunctionCallContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Arguments}
 	 * labeled alternative in {@link ExprParser#args}.
@@ -98,6 +85,18 @@ public interface ExprVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitPrint(ExprParser.PrintContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExprParser#return}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturn(ExprParser.ReturnContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExprParser#block}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlock(ExprParser.BlockContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ExprParser#statement}.
 	 * @param ctx the parse tree
@@ -188,6 +187,13 @@ public interface ExprVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitReal(ExprParser.RealContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code FunctionCall}
+	 * labeled alternative in {@link ExprParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionCall(ExprParser.FunctionCallContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code Equality}
 	 * labeled alternative in {@link ExprParser#expr}.

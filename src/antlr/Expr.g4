@@ -18,15 +18,8 @@ assign: ID '=' expr # Assignment;
 cond:
 	'if' '(' expr ')' '{' block '}' ('else' '{' block '}')? # Condition;
 
-block: statement*;
-
-funcBlock: funcStatement* # FunctionBlock;
-
-funcStatement: (decl | expr | assign | print | return) ';'
-	| (cond | forLoop | whileLoop);
-
 func:
-	'func' ID '(' params? ')' (':' type)? '{' funcBlock '}' # Function;
+	'func' ID '(' params? ')' (':' type)? '{' block '}' # Function;
 
 params: type ID (',' type ID)* # Parameters;
 
@@ -41,8 +34,10 @@ print: 'print(' expr ')';
 
 return: 'return' expr;
 
+block: statement*;
+
 statement:
-	(decl | expr | assign | print) ';'
+	(decl | expr | assign | print | return) ';'
 	| (cond | forLoop | whileLoop);
 
 expr:

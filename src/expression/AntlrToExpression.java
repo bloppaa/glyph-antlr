@@ -1,10 +1,15 @@
 package expression;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.antlr.v4.runtime.Token;
 
 import antlr.ExprBaseVisitor;
 import antlr.ExprParser.AddSubContext;
 import antlr.ExprParser.AndContext;
+import antlr.ExprParser.ArgumentsContext;
 import antlr.ExprParser.AssignmentContext;
 import antlr.ExprParser.BlockContext;
 import antlr.ExprParser.BooleanContext;
@@ -13,15 +18,20 @@ import antlr.ExprParser.ConditionContext;
 import antlr.ExprParser.DeclarationContext;
 import antlr.ExprParser.EqualityContext;
 import antlr.ExprParser.ForLoopContext;
+import antlr.ExprParser.FunctionCallContext;
+import antlr.ExprParser.FunctionContext;
 import antlr.ExprParser.IntContext;
 import antlr.ExprParser.MultDivModContext;
 import antlr.ExprParser.NotContext;
 import antlr.ExprParser.OrContext;
+import antlr.ExprParser.ParametersContext;
 import antlr.ExprParser.ParensContext;
 import antlr.ExprParser.PrintContext;
 import antlr.ExprParser.RealContext;
+import antlr.ExprParser.ReturnContext;
 import antlr.ExprParser.StatementContext;
 import antlr.ExprParser.StringContext;
+import antlr.ExprParser.TypeContext;
 import antlr.ExprParser.UnaryMinusContext;
 import antlr.ExprParser.VariableContext;
 import antlr.ExprParser.WhileLoopContext;
@@ -218,6 +228,9 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 		if (ctx.whileLoop() != null) {
 			return visit(ctx.whileLoop());
 		}
+		if (ctx.return_() != null) {
+			return visit(ctx.return_());
+		}
 		return null;
 	}
 
@@ -273,4 +286,53 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 		}
 		return new ForLoop(id, start, end, new Int(1), block);
 	}
+
+	@Override
+	public Expression visitArguments(ArgumentsContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitArguments(ctx);
+	}
+
+	@Override
+	public Expression visitFunction(FunctionContext ctx) {
+		String id = ctx.ID().getText();
+		Expression block = visit(ctx.block());
+		Function function = new Function(id, block);
+
+		if (ctx.params() != null) {
+			Params params = (Params) visit(ctx.params());
+			function.setParams(params.params);
+		}
+		if (ctx.type() != null) {
+			String returnType = ctx.type().getText();
+			function.setReturnType(returnType);
+		}
+		return function;
+	}
+
+	@Override
+	public Expression visitFunctionCall(FunctionCallContext ctx) {
+		// TODO Auto-generated method stub
+		return super.visitFunctionCall(ctx);
+	}
+
+	@Override
+	public Expression visitParameters(ParametersContext ctx) {
+		Map<String, String> params = new HashMap<>();
+
+		for (int i = 0; i < ctx.getChildCount() / 2; i++) {
+			String id = ctx.ID(i).getText();
+			String type = ctx.type(i).getText();
+			params.put(id, type);
+		}
+
+		return new Params(params);
+	}
+
+	@Override
+	public Expression visitReturn(ReturnContext ctx) {
+		Expression expr = visit(ctx.expr());
+		return new Return(expr);
+	}
+
 }
