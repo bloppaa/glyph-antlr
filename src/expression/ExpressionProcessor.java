@@ -31,7 +31,7 @@ public class ExpressionProcessor {
 		if (result instanceof Double) {
 			boolean isInt = ((double) result) % 1 == 0;
 
-			if (decl.type.equals("int") && !isInt) {
+			if (decl.type.equals(Keyword.INT_TYPE) && !isInt) {
 				throw new IllegalArgumentException("Error: cannot assign float to an int variable");
 			}
 		}
@@ -53,7 +53,7 @@ public class ExpressionProcessor {
 		if (result instanceof Double) {
 			boolean isInt = ((double) result) % 1 == 0;
 
-			if (types.get(assign.id).equals("int") && !isInt) {
+			if (types.get(assign.id).equals(Keyword.INT_TYPE) && !isInt) {
 				throw new IllegalArgumentException(String.format(
 						"Error: cannot assign float '%s' to int variable '%s'", result, assign.id));
 			}
@@ -122,27 +122,27 @@ public class ExpressionProcessor {
 
 			if (left instanceof Double && right instanceof Double) {
 				switch (operator) {
-					case "+":
+					case Keyword.PLUS:
 						result = (double) left + (double) right;
 						break;
-					case "-":
+					case Keyword.MINUS:
 						result = (double) left - (double) right;
 						break;
 				}
 			} else if (left instanceof Integer && right instanceof Integer) {
 				switch (operator) {
-					case "+":
+					case Keyword.PLUS:
 						result = (int) left + (int) right;
 						break;
-					case "-":
+					case Keyword.MINUS:
 						result = (int) left - (int) right;
 						break;
 				}
-			} else if (operator.equals("+") && ((left instanceof String && right instanceof String) ||
+			} else if (operator.equals(Keyword.PLUS) && ((left instanceof String && right instanceof String) ||
 					(left instanceof Double && right instanceof String) ||
 					(left instanceof String && right instanceof Double))) {
 				result = left.toString() + right.toString();
-			} else if (operator.equals("+") && ((left instanceof String && right instanceof String) ||
+			} else if (operator.equals(Keyword.PLUS) && ((left instanceof String && right instanceof String) ||
 					(left instanceof Integer && right instanceof String) ||
 					(left instanceof String && right instanceof Integer))) {
 				result = left.toString() + right.toString();
@@ -159,31 +159,31 @@ public class ExpressionProcessor {
 
 			if (left instanceof Double && right instanceof Double) {
 				switch (operator) {
-					case "*":
+					case Keyword.TIMES:
 						result = (double) left * (double) right;
 						break;
-					case "/":
+					case Keyword.DIVIDE:
 						if ((double) right == 0) {
 							throw new IllegalArgumentException("Error: division by zero");
 						}
 						result = (double) left / (double) right;
 						break;
-					case "%":
+					case Keyword.MOD:
 						result = (double) left % (double) right;
 						break;
 				}
 			} else if (left instanceof Integer && right instanceof Integer) {
 				switch (operator) {
-					case "*":
+					case Keyword.TIMES:
 						result = (int) left * (int) right;
 						break;
-					case "/":
+					case Keyword.DIVIDE:
 						if ((int) right == 0) {
 							throw new IllegalArgumentException("Error: division by zero");
 						}
 						result = (int) left / (int) right;
 						break;
-					case "%":
+					case Keyword.MOD:
 						result = (int) left % (int) right;
 						break;
 				}
@@ -248,10 +248,10 @@ public class ExpressionProcessor {
 			String operator = eq.operator;
 
 			switch (operator) {
-				case "==":
+				case Keyword.EQ:
 					result = left.equals(right);
 					break;
-				case "!=":
+				case Keyword.NEQ:
 					result = !left.equals(right);
 					break;
 			}
@@ -263,31 +263,31 @@ public class ExpressionProcessor {
 
 			if (left instanceof Double && right instanceof Double) {
 				switch (operator) {
-					case "<":
+					case Keyword.LT:
 						result = (double) left < (double) right;
 						break;
-					case ">":
+					case Keyword.GT:
 						result = (double) left > (double) right;
 						break;
-					case "<=":
+					case Keyword.LTE:
 						result = (double) left <= (double) right;
 						break;
-					case ">=":
+					case Keyword.GTE:
 						result = (double) left >= (double) right;
 						break;
 				}
 			} else if (left instanceof Integer && right instanceof Integer) {
 				switch (operator) {
-					case "<":
+					case Keyword.LT:
 						result = (int) left < (int) right;
 						break;
-					case ">":
+					case Keyword.GT:
 						result = (int) left > (int) right;
 						break;
-					case "<=":
+					case Keyword.LTE:
 						result = (int) left <= (int) right;
 						break;
-					case ">=":
+					case Keyword.GTE:
 						result = (int) left >= (int) right;
 						break;
 				}
@@ -304,13 +304,13 @@ public class ExpressionProcessor {
 	}
 
 	private boolean checkTypes(Object obj, String type) {
-		if (obj instanceof Double && type.equals("float")) {
+		if (obj instanceof Double && type.equals(Keyword.FLOAT_TYPE)) {
 			return true;
-		} else if (obj instanceof Integer && type.equals("int")) {
+		} else if (obj instanceof Integer && type.equals(Keyword.INT_TYPE)) {
 			return true;
-		} else if (obj instanceof String && type.equals("string")) {
+		} else if (obj instanceof String && type.equals(Keyword.STRING_TYPE)) {
 			return true;
-		} else if (obj instanceof Boolean && type.equals("bool")) {
+		} else if (obj instanceof Boolean && type.equals(Keyword.BOOL_TYPE)) {
 			return true;
 		}
 
@@ -369,7 +369,7 @@ public class ExpressionProcessor {
 				if (result instanceof Double) {
 					boolean isInt = ((double) result) % 1 == 0;
 
-					if (decl.type.equals("int") && !isInt) {
+					if (decl.type.equals(Keyword.INT_TYPE) && !isInt) {
 						String error = String.format("Error: cannot assign float to an int variable");
 						throw new Error(error);
 					}
@@ -391,7 +391,7 @@ public class ExpressionProcessor {
 					boolean isInt = ((double) result) % 1 == 0;
 
 					int index = function.paramIds.indexOf(assign.id);
-					if (function.paramTypes.get(index).equals("int") && !isInt) {
+					if (function.paramTypes.get(index).equals(Keyword.INT_TYPE) && !isInt) {
 						String error = String.format("Error: cannot assign float to an int variable");
 						throw new Error(error);
 					}

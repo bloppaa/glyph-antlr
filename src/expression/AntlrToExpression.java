@@ -37,22 +37,22 @@ import antlr.ExprParser.WhileLoopContext;
 public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
 	private void checkTypes(Expression expr, String type, int line, int column) {
-		if (type.equals("bool") && !(expr instanceof Bool)) {
+		if (type.equals(Keyword.BOOL_TYPE) && !(expr instanceof Bool)) {
 			String error = String.format(
 					"Error: cannot assign non-bool value to bool variable (%d:%d)", line, column);
 			throw new Error(error);
 		}
-		if (type.equals("int") && !(expr instanceof Int)) {
+		if (type.equals(Keyword.INT_TYPE) && !(expr instanceof Int)) {
 			String error = String.format(
 					"Error: cannot assign non-integer value to int variable (%d:%d)", line, column);
 			throw new Error(error);
 		}
-		if (type.equals("float") && !(expr instanceof Real)) {
+		if (type.equals(Keyword.FLOAT_TYPE) && !(expr instanceof Real)) {
 			String error = String.format(
 					"Error: cannot assign non-float value to float variable (%d:%d)", line, column);
 			throw new Error(error);
 		}
-		if (type.equals("string") && !(expr instanceof Str)) {
+		if (type.equals(Keyword.STRING_TYPE) && !(expr instanceof Str)) {
 			String error = String.format(
 					"Error: cannot assign non-string value to string variable (%d:%d)", line, column);
 			throw new Error(error);
@@ -121,7 +121,7 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 	@Override
 	public Expression visitBoolean(BooleanContext ctx) {
 		String text = ctx.BOOL().getText();
-		boolean value = text.equals("true") ? true : false;
+		boolean value = text.equals(Keyword.TRUE) ? true : false;
 		return new Bool(value);
 	}
 
