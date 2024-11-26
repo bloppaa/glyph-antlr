@@ -18,8 +18,7 @@ assign: ID '=' expr # Assignment;
 cond:
 	'if' '(' expr ')' '{' block '}' ('else' '{' block '}')? # Condition;
 
-func:
-	'func' ID '(' params? ')' (':' type)? '{' block '}' # Function;
+func: 'func' ID '(' params? ')' '{' block '}' # Function;
 
 params: type ID (',' type ID)* # Parameters;
 

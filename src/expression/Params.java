@@ -1,11 +1,13 @@
 package expression;
 
-import java.util.Map;
+import java.util.List;
 
 public class Params extends Expression {
-    Map<String, String> params;
+    List<String> paramIds;
+    List<String> paramTypes;
 
-    public Params(Map<String, String> params) {
-        this.params = params;
+    public Params(List<String> paramIds, List<String> paramTypes) {
+        this.paramIds = paramIds;
+        this.paramTypes = paramTypes;
     }
 }

@@ -1,8 +1,7 @@
 package expression;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.antlr.v4.runtime.Token;
 
@@ -31,7 +30,6 @@ import antlr.ExprParser.RealContext;
 import antlr.ExprParser.ReturnContext;
 import antlr.ExprParser.StatementContext;
 import antlr.ExprParser.StringContext;
-import antlr.ExprParser.TypeContext;
 import antlr.ExprParser.UnaryMinusContext;
 import antlr.ExprParser.VariableContext;
 import antlr.ExprParser.WhileLoopContext;
@@ -289,8 +287,14 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
 	@Override
 	public Expression visitArguments(ArgumentsContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitArguments(ctx);
+		List<Expression> args = new ArrayList<>();
+
+		for (int i = 0; i < ctx.getChildCount(); i += 2) {
+			Expression e = visit(ctx.getChild(i));
+			args.add(e);
+		}
+
+		return new Args(args);
 	}
 
 	@Override
@@ -301,32 +305,39 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
 		if (ctx.params() != null) {
 			Params params = (Params) visit(ctx.params());
-			function.setParams(params.params);
+			function.setParams(params.paramIds, params.paramTypes);
 		}
-		if (ctx.type() != null) {
-			String returnType = ctx.type().getText();
-			function.setReturnType(returnType);
-		}
+
 		return function;
 	}
 
 	@Override
 	public Expression visitFunctionCall(FunctionCallContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitFunctionCall(ctx);
+		String id = ctx.ID().getText();
+		FunctionCall functionCall = new FunctionCall(id);
+
+		if (ctx.args() != null) {
+			Args args = (Args) visit(ctx.args());
+			functionCall.setArgs(args.args);
+		}
+
+		return functionCall;
 	}
 
 	@Override
 	public Expression visitParameters(ParametersContext ctx) {
-		Map<String, String> params = new HashMap<>();
+		List<String> paramIds = new ArrayList<>();
+		List<String> paramTypes = new ArrayList<>();
 
 		for (int i = 0; i < ctx.getChildCount() / 2; i++) {
 			String id = ctx.ID(i).getText();
 			String type = ctx.type(i).getText();
-			params.put(id, type);
+
+			paramIds.add(id);
+			paramTypes.add(type);
 		}
 
-		return new Params(params);
+		return new Params(paramIds, paramTypes);
 	}
 
 	@Override
@@ -334,5 +345,4 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 		Expression expr = visit(ctx.expr());
 		return new Return(expr);
 	}
-
 }

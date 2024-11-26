@@ -1,34 +1,24 @@
 package expression;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Function extends Expression {
-    String id;
-    Expression block;
-    Map<String, String> params = new HashMap<>();
-    String returnType = "void";
+    public String id;
+    public Expression block;
+    public List<String> paramIds = new ArrayList<>();
+    public List<String> paramTypes = new ArrayList<>();
+    public Map<String, Object> values = new HashMap<>();
 
     public Function(String id, Expression block) {
         this.id = id;
         this.block = block;
     }
 
-    public void setParams(Map<String, String> params) {
-        this.params.putAll(params);
-    }
-
-    public void setReturnType(String returnType) {
-        this.returnType = returnType;
-    }
-
-    @Override
-    public String toString() {
-        return "Function{" +
-                "id='" + id + '\'' +
-                ", block=" + block +
-                ", params=" + params +
-                ", returnType='" + returnType + '\'' +
-                '}';
+    public void setParams(List<String> paramIds, List<String> paramTypes) {
+        this.paramIds = paramIds;
+        this.paramTypes = paramTypes;
     }
 }
