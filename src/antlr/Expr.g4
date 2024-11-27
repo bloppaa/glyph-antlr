@@ -5,61 +5,95 @@ package antlr;
 }
 
 prog: (
-		(decl | expr | assign | print) ';'
+		(decl | expr | assign | print) SEMICOLON
 		| (cond | forLoop | whileLoop | func)
 	)+ EOF # Program;
 
-decl: type ID '=' expr # Declaration;
+decl: type ID ASSIGN expr # Declaration;
 
 type: INT_TYPE | FLOAT_TYPE | BOOL_TYPE | STR_TYPE;
 
-assign: ID '=' expr # Assignment;
+assign: ID ASSIGN expr # Assignment;
 
 cond:
-	'if' '(' expr ')' '{' block '}' ('else' '{' block '}')? # Condition;
+	IF LPAREN expr RPAREN LCURLY block RCURLY (
+		ELSE LCURLY block RCURLY
+	)? # Condition;
 
-func: 'func' ID '(' params? ')' '{' block '}' # Function;
+func:
+	FUNC_TYPE ID LPAREN params? RPAREN (COLON type)? LCURLY block RCURLY # Function;
 
-params: type ID (',' type ID)* # Parameters;
+params: type ID (COMMA type ID)* # Parameters;
 
-args: expr (',' expr)* # Arguments;
+args: expr (COMMA expr)* # Arguments;
 
 forLoop:
-	'from' '(' ID '=' expr 'to' expr ('step' expr)? ')' '{' block '}';
+	FOR LPAREN ID ASSIGN expr TO expr (STEP expr)? RPAREN LCURLY block RCURLY;
 
-whileLoop: 'while' '(' expr ')' '{' block '}';
+whileLoop: WHILE LPAREN expr RPAREN LCURLY block RCURLY;
 
-print: 'print(' expr ')';
+print: PRINT LPAREN expr RPAREN;
 
-return: 'return' expr;
+return: RETURN expr;
 
 block: statement*;
 
 statement:
-	(decl | expr | assign | print | return) ';'
+	(decl | expr | assign | print | return) SEMICOLON
 	| (cond | forLoop | whileLoop);
 
 expr:
-	'(' expr ')'							# Parens
-	| '-' expr								# UnaryMinus
-	| '!' expr								# Not
-	| expr ('*' | '/' | '%') expr			# MultDivMod
-	| expr ('+' | '-') expr					# AddSub
-	| expr ('>' | '>=' | '<' | '<=') expr	# Comparison
-	| expr ('==' | '!=') expr				# Equality
-	| expr '&&' expr						# And
-	| expr '||' expr						# Or
-	| ID '(' args? ')'						# FunctionCall
-	| ID									# Variable
-	| INT									# Int
-	| FLOAT									# Real
-	| BOOL									# Boolean
-	| STR									# String;
+	LPAREN expr RPAREN					# Parens
+	| MINUS expr						# UnaryMinus
+	| NOT expr							# Not
+	| expr (MULT | DIV | MOD) expr		# MultDivMod
+	| expr (PLUS | MINUS) expr			# AddSub
+	| expr (GT | GTE | LT | LTE) expr	# Comparison
+	| expr (EQ | NEQ) expr				# Equality
+	| expr AND expr						# And
+	| expr OR expr						# Or
+	| ID LPAREN args? RPAREN			# FunctionCall
+	| ID								# Variable
+	| INT								# Int
+	| FLOAT								# Real
+	| BOOL								# Boolean
+	| STR								# String;
 
+SEMICOLON: ';';
+COLON: ':';
+COMMA: ',';
+ASSIGN: '=';
+NOT: '!';
+AND: '&&';
+OR: '||';
+PLUS: '+';
+MINUS: '-';
+MULT: '*';
+DIV: '/';
+MOD: '%';
+EQ: '==';
+NEQ: '!=';
+GT: '>';
+GTE: '>=';
+LT: '<';
+LTE: '<=';
+LPAREN: '(';
+RPAREN: ')';
+LCURLY: '{';
+RCURLY: '}';
+IF: 'if';
+ELSE: 'else';
+FOR: 'for';
+TO: 'to';
+STEP: 'step';
+WHILE: 'while';
+PRINT: 'print';
+RETURN: 'return';
 INT_TYPE: 'int';
 FLOAT_TYPE: 'float';
 BOOL_TYPE: 'bool';
 STR_TYPE: 'string';
+FUNC_TYPE: 'function';
 INT: '0' | [1-9][0-9]*;
 FLOAT: ('0' | [1-9][0-9]*) ('.' [0-9]+)?;
 BOOL: 'true' | 'false';

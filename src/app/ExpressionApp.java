@@ -18,7 +18,7 @@ public class ExpressionApp {
 
 	public static void main(String[] args) {
 		if (args.length != 1) {
-			System.err.println("Usage: file name");
+			System.err.println("Error: no input file provided");
 		} else {
 			try {
 				String fileName = args[0];

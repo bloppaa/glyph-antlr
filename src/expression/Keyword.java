@@ -8,9 +8,9 @@ public abstract class Keyword {
     public static final String COMMENT = "//";
     public static final String IF = "if";
     public static final String ELSE = "else";
-    public static final String FOR = "from";
+    public static final String FOR = "for";
     public static final String WHILE = "while";
-    public static final String FUNC = "func";
+    public static final String FUNC = "function";
     public static final String TO = "to";
     public static final String STEP = "step";
     public static final String TRUE = "true";
