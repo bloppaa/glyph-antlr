@@ -11,7 +11,7 @@
 %        🪙
 ==       🟰
 !=       🚫
->        ▶️
+>        ▶
 >=       ⏩
 <        ◀️
 <=       ⏪
@@ -25,10 +25,10 @@ for      🔁
 to       ➡️
 step     👟
 while    🌀
-print    🖨
+print    🖨️
 return   ↩️
 int      🧮
-float    ☁️
+float    🛟
 bool     ✅
 string   📄
 function 🍿

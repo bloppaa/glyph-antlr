@@ -28,7 +28,7 @@ public abstract class Keyword {
     public static final String TO = "➡️";
     public static final String STEP = "👟";
     public static final String WHILE = "🌀";
-    public static final String PRINT = "🖨";
+    public static final String PRINT = "🖨️";
     public static final String RETURN = "↩️";
     public static final String INT_TYPE = "🧮";
     public static final String FLOAT_TYPE = "☁️";

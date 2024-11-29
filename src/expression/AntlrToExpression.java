@@ -128,8 +128,7 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 	@Override
 	public Expression visitString(StringContext ctx) {
 		String text = ctx.STR().getText();
-		String value = text.substring(1, text.length() - 1);
-		return new Str(value);
+		return new Str(text);
 	}
 
 	@Override

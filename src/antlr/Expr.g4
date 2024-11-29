@@ -57,7 +57,7 @@ expr:
 	| INT								# Int
 	| FLOAT								# Real
 	| BOOL								# Boolean
-	| STR								# String;
+	| STR              					# String;
 
 // SEMICOLON: ';'; COLON: ':'; COMMA: ','; ASSIGN: '='; NOT: '!'; AND: '&&'; OR: '||'; PLUS: '+';
 // MINUS: '-'; MULT: '*'; DIV: '/'; MOD: '%'; EQ: '=='; NEQ: '!='; GT: '>'; GTE: '>='; LT: '<'; LTE:
@@ -93,17 +93,18 @@ FOR: '🔁';
 TO: '➡️';
 STEP: '👟';
 WHILE: '🌀';
-PRINT: '🖨';
+PRINT: '🖨️';
 RETURN: '↩️';
 INT_TYPE: '🧮';
-FLOAT_TYPE: '☁️';
+FLOAT_TYPE: '🛟';
 BOOL_TYPE: '✅';
 STR_TYPE: '📄';
 FUNC_TYPE: '🍿';
 INT: '0' | [1-9][0-9]*;
 FLOAT: ('0' | [1-9][0-9]*) ('.' [0-9]+)?;
 BOOL: '👍' | '👎';
-STR: '🧵' .*? '🧵';
+STR_DLM: '🧵';
+STR: STR_DLM .*?  STR_DLM; 
 COMMENT: '💭' ~[\r\n]* -> skip;
 ID: [a-z][a-zA-Z0-9_]*;
 WS: [ \t\n\r]+ -> skip;
