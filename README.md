@@ -400,7 +400,7 @@ Imprime los números del 1 al 100, pero para múltiplos de 3 imprime **Fizz**, p
 
 ### Fibonacci
 
-Imprime los primeros *n* números de la secuencia de Fibonacci.
+Imprime los primeros 20 números de la secuencia de Fibonacci.
 
 ```
 🧮 first 👉 0 ✋
@@ -442,7 +442,7 @@ Imprime los números primos del 1 al 100.
 
 ### Primos 2
 
-Imprime los primeros *n* números primos.
+Imprime los primeros 100 números primos.
 
 ```
 🍿 isPrime🧎‍➡️🧮 n🧎
@@ -460,9 +460,8 @@ Imprime los primeros *n* números primos.
 
 🧮 count 👉 0 ✋
 🧮 number 👉 1 ✋
-🧮 n 👉 100 ✋
 
-🌀 🧎‍➡️count ◀️ n🧎 🏃‍➡️
+🌀 🧎‍➡️count ◀️ 100🧎 🏃‍➡️
     🤔 🧎‍➡️isPrime🧎‍➡️number🧎🧎 🏃‍➡️
         🖨️🧎‍➡️number🧎 ✋
         count 👉 count ➕ 1 ✋
@@ -478,5 +477,5 @@ El compilador se encuentra alojado en Replit, por lo que es posible probar los e
 Para compilar un programa, se necesita ejecutar el siguiente comando en la consola:
 
 ```bash
-java -jar compiler.jar <archivo>
+java -jar glyph.jar <archivo>
 ```
