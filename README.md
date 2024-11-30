@@ -284,13 +284,7 @@ Para ver la totalidad de las producciones definidas, acceder al archivo [Expr.g4
 
 ### Implementación
 
-ANTLR4 genera una clase `antlr.ExprBaseVisitor` que permite visitar cada uno de los nodos del árbol de parseo. Esta clase genera un método `visit` para cada una de las producciones definidas en el archivo `Expr.g4`. Por ejemplo, para la producción `expr` en el ejemplo anterior, se usarían los métodos:
-
-- `visitParens`
-- `visitUnaryMinus`
-- `visitNot`
-- `visitMultDivMod`
-- `visitAddSub`
+ANTLR4 genera una clase `antlr.ExprBaseVisitor` que permite visitar cada uno de los nodos del árbol de parseo. Esta clase genera un método `visit` para cada una de las producciones definidas en el archivo `Expr.g4`. Por ejemplo, para la producción `expr` en el ejemplo anterior, se usarían los métodos `visitAddSub` y `visitMultDivMod`.
 
 Sin embargo, estos métodos no están implementados por defecto. Por lo tanto, es necesario extender la clase `antlr.ExprBaseVisitor` e implementar los métodos necesarios para cada producción.
 
