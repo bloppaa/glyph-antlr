@@ -36,41 +36,12 @@ import antlr.ExprParser.WhileLoopContext;
 
 public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
-	private void checkTypes(Expression expr, String type, int line, int column) {
-		if (type.equals(Keyword.BOOL_TYPE) && !(expr instanceof Bool)) {
-			String error = String.format(
-					"Error: cannot assign non-bool value to bool variable (%d:%d)", line, column);
-			throw new Error(error);
-		}
-		if (type.equals(Keyword.INT_TYPE) && !(expr instanceof Int)) {
-			String error = String.format(
-					"Error: cannot assign non-integer value to int variable (%d:%d)", line, column);
-			throw new Error(error);
-		}
-		if (type.equals(Keyword.FLOAT_TYPE) && !(expr instanceof Real)) {
-			String error = String.format(
-					"Error: cannot assign non-float value to float variable (%d:%d)", line, column);
-			throw new Error(error);
-		}
-		if (type.equals(Keyword.STRING_TYPE) && !(expr instanceof Str)) {
-			String error = String.format(
-					"Error: cannot assign non-string value to string variable (%d:%d)", line, column);
-			throw new Error(error);
-		}
-	}
-
 	@Override
 	public Expression visitDeclaration(DeclarationContext ctx) {
-		Token idToken = ctx.ID().getSymbol();
-		int line = idToken.getLine();
-		int column = idToken.getCharPositionInLine() + 1;
 
 		String id = ctx.ID().getText();
 		String type = ctx.getChild(0).getText();
-
 		Expression expr = visit(ctx.expr());
-
-		checkTypes(expr, type, line, column);
 
 		return new VariableDeclaration(id, type, expr);
 	}
@@ -78,14 +49,7 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 	@Override
 	public Expression visitAssignment(AssignmentContext ctx) {
 		String id = ctx.ID().getText();
-		Token idToken = ctx.ID().getSymbol();
-		int line = idToken.getLine();
-		int column = idToken.getCharPositionInLine() + 1;
-
 		Expression expr = visit(ctx.expr());
-		String type = ctx.getChild(0).getText();
-
-		checkTypes(expr, type, line, column);
 
 		return new Assignment(id, expr);
 	}
@@ -128,7 +92,17 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 	@Override
 	public Expression visitString(StringContext ctx) {
 		String text = ctx.STR().getText();
-		return new Str(text);
+
+		int delimiterLength = 1;
+		if (text.length() > 2 * delimiterLength) {
+			int startIndex = text.offsetByCodePoints(0, delimiterLength);
+			int endIndex = text.offsetByCodePoints(0, text.codePointCount(0, text.length()) - delimiterLength);
+
+			String value = text.substring(startIndex, endIndex);
+			return new Str(value);
+		} else {
+			throw new IllegalArgumentException("String is too short to contain valid content with delimiters.");
+		}
 	}
 
 	@Override

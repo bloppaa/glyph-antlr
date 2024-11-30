@@ -62,9 +62,7 @@ public class ExpressionProcessor {
 		values.put(assign.id, result);
 	}
 
-	public List<String> getEvaluationResults() {
-		List<String> evaluations = new ArrayList<String>();
-
+	public void proccessExpressions() {
 		for (int i = 0; i < list.size(); i++) {
 			Expression e = list.get(i);
 			if (e instanceof VariableDeclaration) {
@@ -86,8 +84,6 @@ public class ExpressionProcessor {
 				processFunction((Function) e);
 			}
 		}
-
-		return evaluations;
 	}
 
 	private Object getEvalResult(Expression e, Map<String, Object> values) {
@@ -435,9 +431,13 @@ public class ExpressionProcessor {
 			if (e instanceof Assignment) {
 				addAssignment(e);
 			} else if (e instanceof VariableDeclaration) {
-				String error = String.format("Error: cannot declare variable '%s' inside code block",
-						((VariableDeclaration) e).id);
-				throw new Error(error);
+				VariableDeclaration decl = (VariableDeclaration) e;
+				if (values.containsKey(decl.id)) {
+					Assignment assign = new Assignment(decl.id, decl.expr);
+					addAssignment(assign);
+				} else {
+					addDeclaration(e);
+				}
 			} else if (e instanceof Print) {
 				Expression expr = ((Print) e).expr;
 				Object result = getEvalResult(expr, values);

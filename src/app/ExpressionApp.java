@@ -32,18 +32,9 @@ public class ExpressionApp {
 
 				AntlrToProgram progVisitor = new AntlrToProgram();
 				Program prog = progVisitor.visit(antlrAST);
+				ExpressionProcessor ep = new ExpressionProcessor(prog.expressions);
 
-				if (progVisitor.semanticErrors.isEmpty()) {
-					ExpressionProcessor ep = new ExpressionProcessor(prog.expressions);
-					for (String evaluation : ep.getEvaluationResults()) {
-						System.out.println(evaluation);
-					}
-
-				} else {
-					for (String err : progVisitor.semanticErrors) {
-						System.err.println(err);
-					}
-				}
+				ep.proccessExpressions();
 			} catch (Error e) {
 				System.err.println(e.getMessage());
 				return;

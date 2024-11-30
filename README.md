@@ -1,8 +1,4 @@
 # Glyph
----
-
-## Introducción
-
 
 Glyph es un lenguaje de programación basado en emojis, donde las palabras clave y los tokens tradicionales son reemplazados por símbolos visuales. Diseñado para ser intuitivo y llamativo, Glyph combina una estética lúdica con una funcionalidad sólida, permitiendo manejar conceptos esenciales de programación como variables, control de flujo y funciones.
 
@@ -233,8 +229,260 @@ Una vez definidas las funciones, se pueden llamar de la siguiente manera:
 
 ## Compilador
 
-El compilador de Glyph fue implementado utilizando ANTLR4. ANTLR4 es una herramienta que permite generar parsers a partir de gramáticas definidas en un archivo de texto.
+El compilador de Glyph fue implementado utilizando [ANTLR4](https://www.antlr.org/index.html). ANTLR4 es una herramienta que permite generar parsers a partir de gramáticas definidas en un archivo de texto.
 
 La ventaja de usar ANTLR4 es que permite definir tanto los tokens como la gramática en un sólo archivo, generando un parser y un lexer en el lenguaje de programación deseado. En este caso, se utilizó Java para implementar el compilador.
 
 ### Tokens
+
+Cada una de las keywords y símbolos utilizados, así como las reglas de nombre de identificadores fueron definidos como tokens en el archivo `Expr.g4`. A continuación se muestra un extracto de los tokens definidos:
+
+```antlr
+SEMICOLON: '✋';
+COMMA: '🔸';
+ASSIGN: '👉';
+NOT: '🙅';
+AND: '🤝';
+OR: '🤷';
+
+INT: '0' | [1-9][0-9]*;
+FLOAT: ('0' | [1-9][0-9]*) ('.' [0-9]+)?;
+ID: [a-z][a-zA-Z0-9_]*;
+```
+
+Para ver la totalidad de los tokens definidos, acceder al archivo [Expr.g4](src/antlr/Expr.g4).
+
+### Producciones
+
+Las producciones de la gramática fueron definidas en el mismo archivo `Expr.g4`. A continuación se muestra un extracto de las producciones definidas:
+
+```antlr
+decl: type ID ASSIGN expr # Declaration;
+
+type: INT_TYPE | FLOAT_TYPE | BOOL_TYPE | STR_TYPE;
+
+cond:
+	IF LPAREN expr RPAREN LCURLY block RCURLY (
+		ELSE LCURLY block RCURLY
+	)? # Condition;
+
+expr:
+	LPAREN expr RPAREN			   # Parens
+	| MINUS expr				   # UnaryMinus
+	| NOT expr					   # Not
+	| expr (MULT | DIV | MOD) expr # MultDivMod
+	| expr (PLUS | MINUS) expr	   # AddSub
+```
+
+El orden de las producciones es importante, ya que ANTLR4 intentará hacer *match* con la primera producción que coincida con la entrada. De esta manera, es posible definir la jerarquía de las operaciones y las reglas de precedencia.
+
+A continuación se muestra el árbol de parseo generado por ANTLR4 para la expresión `1 ➕ 2 ✖️ 3 ✋`:
+
+<img src="img/parse_tree.png" width=300/>
+
+Para ver la totalidad de las producciones definidas, acceder al archivo [Expr.g4](src/antlr/Expr.g4).
+
+### Implementación
+
+ANTLR4 genera una clase `antlr.ExprBaseVisitor` que permite visitar cada uno de los nodos del árbol de parseo. Esta clase genera un método `visit` para cada una de las producciones definidas en el archivo `Expr.g4`. Por ejemplo, para la producción `expr` en el ejemplo anterior, se usarían los métodos:
+
+- `visitParens`
+- `visitUnaryMinus`
+- `visitNot`
+- `visitMultDivMod`
+- `visitAddSub`
+
+Sin embargo, estos métodos no están implementados por defecto. Por lo tanto, es necesario extender la clase `antlr.ExprBaseVisitor` e implementar los métodos necesarios para cada producción.
+
+Para ejemplificar el proceso, se usará el siguiente código de ejemplo:
+
+```
+🧮 sum 👉 1 ➕ 2 ✖️ 3 ✋
+```
+
+Esta expresión generará el siguiente arbol de parseo:
+
+<img src="img/example_tree.png" width=300>
+
+La idea es simple: crear una clase por cada producción definida, y crear instancias de estas clases por cada visita a un nodo del árbol de parseo. De esta manera, es posible realizar acciones específicas para cada nodo del árbol.
+
+La raíz del árbol se trata de manera especial, ya que es el punto de entrada del programa. Por lo tanto, se debe implementar un método `visitProgram` como primer paso.
+
+```java
+public class AntlrToProgram extends ExprBaseVisitor<Program> {
+
+	@Override
+	public Program visitProgram(ProgramContext ctx) {
+		Program prog = new Program();
+
+		AntlrToExpression exprVisitor = new AntlrToExpression();
+
+		for (int i = 0; i < ctx.getChildCount() - 1; i++) {
+			ParseTree child = ctx.getChild(i);
+
+			if (child.getText().equals(Keyword.SEMICOLON)) {
+				continue;
+			}
+
+			prog.addExpression(exprVisitor.visit(ctx.getChild(i)));
+		}
+
+		return prog;
+	}
+}
+```
+
+Primero se crea una instancia de la clase `Program` que contendrá todas las expresiones del programa. Luego, se crea una instancia de la clase `AntlrToExpression` que se encargará de visitar cada una de las expresiones del programa. Finalmente, se recorren todos los nodos del árbol de parseo y se agregan las expresiones al objeto `prog`.
+
+En este ejemplo en particular, sólo se visitará el nodo `decl` ya que los otros dos nodos corresponden al token `SEMICOLON`, el cual no hace nada, y el nodo indicando el fin del programa.
+
+La clase `AntlrToExpression` es la encargada de visitar cada una de las expresiones del programa y devolver un objeto `Expression` correspondiente. Cuando se visita el nodo `decl`, se crea una instancia de la clase `VariableDeclaration` y se maneja de manera correspondiente.
+
+```java
+public class VariableDeclaration extends Expression {
+	public String id;
+	public String type;
+	public Expression expr;
+
+	public VariableDeclaration(String id, String type, Expression expr) {
+		this.id = id;
+		this.type = type;
+		this.expr = expr;
+	}
+}
+```
+
+```java
+public class AntlrToExpression extends ExprBaseVisitor<Expression> {
+
+    @Override
+    public Expression visitDeclaration(DeclarationContext ctx) {
+        String id = ctx.ID().getText();
+        String type = ctx.type().getText();
+        Expression expr = visit(ctx.expr());
+
+        return new VariableDeclaration(id, type, expr);
+    }
+}   
+```
+
+Este mismo patrón se repite para cada uno de los nodos del árbol de parseo. Al finalizar el método `visitProgram`, se tendrá un objeto `Program` con todas las expresiones del programa.
+
+Por último, se necesita una clase para poder procesar todas las expresiones del programa. Esta clase se encargará de visitar cada una de las expresiones y ejecutar las acciones correspondientes. Podría decirse que esta clase, llamada `ExpressionProcessor.java`, es la que contiene toda la lógica del compilador.
+
+En el programa de ejemplo, se tendrían las expresiones `VariableDeclaration`, `AddSub`, `MultDivMod` e `Int`. Es la clase `ExpressionProcessor` la encargada de revisar que el programa no tenga errores semánticos. Por ejemplo, que la variable `sum` no haya sido declarada previamente, que el resultado de la operación aritmética sea del tipo correcto, etc.
+
+Finalmente, el último paso es crear la clase `Main.java` que se encargará de leer el archivo de entrada, generar el árbol de parseo y ejecutar el programa.
+
+## Ejemplos
+
+### FizzBuzz
+
+Imprime los números del 1 al 100, pero para múltiplos de 3 imprime **Fizz**, para múltiplos de 5 imprime **Buzz** y para números que son múltiplos de 3 y 5, imprime **FizzBuzz**.
+
+```
+🍿 fizzbuzz🧎‍➡️🧮 n🧎
+🏃‍➡️
+    🤔 🧎‍➡️n 🪙 15 🟰 0🧎
+    🏃‍➡️
+        ↩️ 🧵FizzBuzz🧵 ✋
+    🏃
+    🤔 🧎‍➡️n 🪙 3 🟰 0🧎
+    🏃‍➡️
+        ↩️ 🧵Fizz🧵 ✋
+    🏃
+    🤔 🧎‍➡️n 🪙 5 🟰 0🧎
+    🏃‍➡️
+        ↩️ 🧵Buzz🧵 ✋
+    🏃
+    ↩️ n ✋
+🏃
+
+🔁 🧎‍➡️i 👉 1 ➡️ 100🧎
+🏃‍➡️
+    🖨️🧎‍➡️fizzbuzz🧎‍➡️i🧎🧎 ✋
+🏃
+```
+
+### Fibonacci
+
+Imprime los primeros *n* números de la secuencia de Fibonacci.
+
+```
+🧮 first 👉 0 ✋
+🧮 second 👉 1 ✋
+
+🔁 🧎‍➡️i 👉 1 ➡️ 20🧎
+🏃‍➡️
+    🖨️🧎‍➡️first🧎 ✋
+    🧮 next 👉 first ➕ second ✋
+    first 👉 second ✋
+    second 👉 next ✋
+🏃
+```
+
+### Primos
+
+Imprime los números primos del 1 al 100.
+
+```
+🍿 isPrime🧎‍➡️🧮 n🧎
+🏃‍➡️
+    🤔 🧎‍➡️n ◀️ 2🧎 🏃‍➡️
+        ↩️ 👎 ✋
+    🏃
+    🔁 🧎‍➡️i 👉 2 ➡️ n ➖ 1🧎 🏃‍➡️
+        🤔 🧎‍➡️n 🪙 i 🟰 0🧎 🏃‍➡️
+            ↩️ 👎 ✋
+        🏃
+    🏃
+    ↩️ 👍 ✋
+🏃
+
+🔁 🧎‍➡️i 👉 1 ➡️ 100🧎 🏃‍➡️
+    🤔 🧎‍➡️isPrime🧎‍➡️i🧎🧎 🏃‍➡️
+        🖨️🧎‍➡️i🧎 ✋
+    🏃
+🏃
+```
+
+### Primos 2
+
+Imprime los primeros *n* números primos.
+
+```
+🍿 isPrime🧎‍➡️🧮 n🧎
+🏃‍➡️
+    🤔 🧎‍➡️n ◀️ 2🧎 🏃‍➡️
+        ↩️ 👎 ✋
+    🏃
+    🔁 🧎‍➡️i 👉 2 ➡️ n ➖ 1🧎 🏃‍➡️
+        🤔 🧎‍➡️n 🪙 i 🟰 0🧎 🏃‍➡️
+            ↩️ 👎 ✋
+        🏃
+    🏃
+    ↩️ 👍 ✋
+🏃
+
+🧮 count 👉 0 ✋
+🧮 number 👉 1 ✋
+🧮 n 👉 100 ✋
+
+🌀 🧎‍➡️count ◀️ n🧎 🏃‍➡️
+    🤔 🧎‍➡️isPrime🧎‍➡️number🧎🧎 🏃‍➡️
+        🖨️🧎‍➡️number🧎 ✋
+        count 👉 count ➕ 1 ✋
+    🏃
+    number 👉 number ➕ 1 ✋
+🏃
+```
+
+## Testing
+
+El compilador se encuentra alojado en Replit, por lo que es posible probar los ejemplos o crear nuevos scripts sin tener que instalar nada. Para ello, accede al siguiente [enlace](https://replit.com/@Blopa11/glyph-compiler).
+
+Para compilar un programa, se necesita ejecutar el siguiente comando en la consola:
+
+```bash
+java -jar compiler.jar <archivo>
+```

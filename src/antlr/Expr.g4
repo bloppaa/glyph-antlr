@@ -59,13 +59,6 @@ expr:
 	| BOOL								# Boolean
 	| STR              					# String;
 
-// SEMICOLON: ';'; COLON: ':'; COMMA: ','; ASSIGN: '='; NOT: '!'; AND: '&&'; OR: '||'; PLUS: '+';
-// MINUS: '-'; MULT: '*'; DIV: '/'; MOD: '%'; EQ: '=='; NEQ: '!='; GT: '>'; GTE: '>='; LT: '<'; LTE:
-// '<='; LPAREN: '('; RPAREN: ')'; LCURLY: '{'; RCURLY: '}'; IF: 'if'; ELSE: 'else'; FOR: 'for'; TO:
-// 'to'; STEP: 'step'; WHILE: 'while'; PRINT: 'print'; RETURN: 'return'; INT_TYPE: 'int';
-// FLOAT_TYPE: 'float'; BOOL_TYPE: 'bool'; STR_TYPE: 'string'; FUNC_TYPE: 'function'; INT: '0' |
-// [1-9][0-9]*; FLOAT: ('0' | [1-9][0-9]*) ('.' [0-9]+)?; BOOL: 'true' | 'false'; STR: '"' .*? '"';
-// COMMENT: '//' ~[\r\n]* -> skip;
 SEMICOLON: '✋';
 COMMA: '🔸';
 ASSIGN: '👉';

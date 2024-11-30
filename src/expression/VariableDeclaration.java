@@ -10,5 +10,4 @@ public class VariableDeclaration extends Expression {
 		this.type = type;
 		this.expr = expr;
 	}
-
 }
