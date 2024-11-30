@@ -1,5 +1,10 @@
 # Glyph
 
+Hecho con ❤️ por:
+
+- Pablo Cortés - 20.600.436-3
+- Fabricha Ramírez - 20.990.386-5
+
 Glyph es un lenguaje de programación basado en emojis, donde las palabras clave y los tokens tradicionales son reemplazados por símbolos visuales. Diseñado para ser intuitivo y llamativo, Glyph combina una estética lúdica con una funcionalidad sólida, permitiendo manejar conceptos esenciales de programación como variables, control de flujo y funciones.
 
 ## Gramática
@@ -267,11 +272,11 @@ cond:
 	)? # Condition;
 
 expr:
-	LPAREN expr RPAREN			   # Parens
-	| MINUS expr				   # UnaryMinus
-	| NOT expr					   # Not
+	LPAREN expr RPAREN # Parens
+	| MINUS expr # UnaryMinus
+	| NOT expr # Not
 	| expr (MULT | DIV | MOD) expr # MultDivMod
-	| expr (PLUS | MINUS) expr	   # AddSub
+	| expr (PLUS | MINUS) expr # AddSub
 ```
 
 El orden de las producciones es importante, ya que ANTLR4 intentará hacer *match* con la primera producción que coincida con la entrada. De esta manera, es posible definir la jerarquía de las operaciones y las reglas de precedencia.
@@ -284,13 +289,7 @@ Para ver la totalidad de las producciones definidas, acceder al archivo [Expr.g4
 
 ### Implementación
 
-ANTLR4 genera una clase `antlr.ExprBaseVisitor` que permite visitar cada uno de los nodos del árbol de parseo. Esta clase genera un método `visit` para cada una de las producciones definidas en el archivo `Expr.g4`. Por ejemplo, para la producción `expr` en el ejemplo anterior, se usarían los métodos:
-
-- `visitParens`
-- `visitUnaryMinus`
-- `visitNot`
-- `visitMultDivMod`
-- `visitAddSub`
+ANTLR4 genera una clase `antlr.ExprBaseVisitor` que permite visitar cada uno de los nodos del árbol de parseo. Esta clase genera un método `visit` para cada una de las producciones definidas en el archivo `Expr.g4`. Por ejemplo, para la producción `expr` en el ejemplo anterior, se usarían los métodos `visitAddSub` y `visitMultDivMod`.
 
 Sin embargo, estos métodos no están implementados por defecto. Por lo tanto, es necesario extender la clase `antlr.ExprBaseVisitor` e implementar los métodos necesarios para cada producción.
 
@@ -406,7 +405,7 @@ Imprime los números del 1 al 100, pero para múltiplos de 3 imprime **Fizz**, p
 
 ### Fibonacci
 
-Imprime los primeros *n* números de la secuencia de Fibonacci.
+Imprime los primeros 20 números de la secuencia de Fibonacci.
 
 ```
 🧮 first 👉 0 ✋
@@ -448,7 +447,7 @@ Imprime los números primos del 1 al 100.
 
 ### Primos 2
 
-Imprime los primeros *n* números primos.
+Imprime los primeros 100 números primos.
 
 ```
 🍿 isPrime🧎‍➡️🧮 n🧎
@@ -466,9 +465,8 @@ Imprime los primeros *n* números primos.
 
 🧮 count 👉 0 ✋
 🧮 number 👉 1 ✋
-🧮 n 👉 100 ✋
 
-🌀 🧎‍➡️count ◀️ n🧎 🏃‍➡️
+🌀 🧎‍➡️count ◀️ 100🧎 🏃‍➡️
     🤔 🧎‍➡️isPrime🧎‍➡️number🧎🧎 🏃‍➡️
         🖨️🧎‍➡️number🧎 ✋
         count 👉 count ➕ 1 ✋
@@ -481,8 +479,8 @@ Imprime los primeros *n* números primos.
 
 El compilador se encuentra alojado en Replit, por lo que es posible probar los ejemplos o crear nuevos scripts sin tener que instalar nada. Para ello, accede al siguiente [enlace](https://replit.com/@Blopa11/glyph-compiler).
 
-Para compilar un programa, se necesita ejecutar el siguiente comando en la consola:
+Para compilar un programa, se necesita ejecutar el siguiente comando en la shell:
 
 ```bash
-java -jar compiler.jar <archivo>
+java -jar glyph.jar <nombre-archivo>
 ```
