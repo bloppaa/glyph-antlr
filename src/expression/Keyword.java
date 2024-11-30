@@ -1,5 +1,7 @@
 package expression;
 
+import java.util.Map;
+
 public abstract class Keyword {
     public static final String SEMICOLON = "✋";
     public static final String COMMA = "🔸";
@@ -38,4 +40,43 @@ public abstract class Keyword {
     public static final String TRUE = "👍";
     public static final String FALSE = "👎";
     public static final String STR_DELIM = "🧵";
+
+    public static final Map<String, String> translated = Map.ofEntries(
+            Map.entry(SEMICOLON, ";"),
+            Map.entry(COMMA, ","),
+            Map.entry(ASSIGN, "="),
+            Map.entry(NOT, "!"),
+            Map.entry(AND, "&&"),
+            Map.entry(OR, "||"),
+            Map.entry(PLUS, "+"),
+            Map.entry(MINUS, "-"),
+            Map.entry(TIMES, "*"),
+            Map.entry(DIVIDE, "/"),
+            Map.entry(MOD, "%"),
+            Map.entry(EQ, "=="),
+            Map.entry(NEQ, "!="),
+            Map.entry(GT, ">"),
+            Map.entry(GTE, ">="),
+            Map.entry(LT, "<"),
+            Map.entry(LTE, "<="),
+            Map.entry(LPAREN, "("),
+            Map.entry(RPAREN, ")"),
+            Map.entry(LCURLY, "{"),
+            Map.entry(RCURLY, "}"),
+            Map.entry(IF, "if"),
+            Map.entry(ELSE, "else"),
+            Map.entry(FOR, "for"),
+            Map.entry(TO, "to"),
+            Map.entry(STEP, "step"),
+            Map.entry(WHILE, "while"),
+            Map.entry(PRINT, "print"),
+            Map.entry(RETURN, "return"),
+            Map.entry(INT_TYPE, "int"),
+            Map.entry(FLOAT_TYPE, "float"),
+            Map.entry(BOOL_TYPE, "bool"),
+            Map.entry(STRING_TYPE, "string"),
+            Map.entry(FUNC_TYPE, "func"),
+            Map.entry(TRUE, "true"),
+            Map.entry(FALSE, "false"),
+            Map.entry(STR_DELIM, "\""));
 }

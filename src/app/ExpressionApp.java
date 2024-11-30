@@ -37,7 +37,6 @@ public class ExpressionApp {
 				ep.proccessExpressions();
 			} catch (Error e) {
 				System.err.println(e.getMessage());
-				return;
 			}
 		}
 	}

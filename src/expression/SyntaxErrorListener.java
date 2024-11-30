@@ -18,8 +18,8 @@ public class SyntaxErrorListener extends BaseErrorListener {
 
         List<String> stack = ((Parser) recognizer).getRuleInvocationStack();
         Collections.reverse(stack);
-        System.err.println(
-                String.format("Syntax error: %s (%d:%d)",
-                        msg, line, charPositionInLine + 1));
+        String error = String.format("Syntax error: %s (%d:%d)",
+                msg, line, charPositionInLine + 1);
+        System.err.println(error);
     }
 }

@@ -11,6 +11,12 @@ public class ExpressionProcessor {
 	public Map<String, String> types;
 	public Map<String, Function> funcs;
 
+	public Map<String, String> textTypes = Map.of(
+			Keyword.INT_TYPE, "int",
+			Keyword.FLOAT_TYPE, "float",
+			Keyword.STRING_TYPE, "string",
+			Keyword.BOOL_TYPE, "bool");
+
 	public ExpressionProcessor(List<Expression> list) {
 		this.list = list;
 		values = new HashMap<>();
@@ -22,17 +28,23 @@ public class ExpressionProcessor {
 		VariableDeclaration decl = (VariableDeclaration) e;
 
 		if (values.containsKey(decl.id)) {
-			String error = String.format("Error: variable '%s' already declared", decl.id);
+			String error = String.format("variable '%s' already declared", decl.id);
 			throw new Error(error);
 		}
 
 		Object result = getEvalResult(decl.expr, this.values);
 
+		if (!checkTypes(result, decl.type)) {
+			String textType = textTypes.get(decl.type);
+			String error = String.format("cannot assign '%s' to variable '%s' of type '%s'", result, decl.id, textType);
+			throw new Error(error);
+		}
+
 		if (result instanceof Double) {
 			boolean isInt = ((double) result) % 1 == 0;
 
 			if (decl.type.equals(Keyword.INT_TYPE) && !isInt) {
-				throw new IllegalArgumentException("Error: cannot assign float to an int variable");
+				throw new IllegalArgumentException("cannot assign float to an int variable");
 			}
 		}
 
@@ -44,18 +56,26 @@ public class ExpressionProcessor {
 		Assignment assign = (Assignment) e;
 
 		if (!values.containsKey(assign.id)) {
-			String error = String.format("Error: variable '%s' not declared", assign.id);
+			String error = String.format("variable '%s' not declared", assign.id);
 			throw new Error(error);
 		}
 
 		Object result = getEvalResult(assign.expr, this.values);
+		String type = types.get(assign.id);
+
+		if (!checkTypes(result, type)) {
+			String textType = textTypes.get(type);
+			String error = String.format("cannot assign '%s' to variable '%s' of type '%s'", result, assign.id,
+					textType);
+			throw new Error(error);
+		}
 
 		if (result instanceof Double) {
 			boolean isInt = ((double) result) % 1 == 0;
 
 			if (types.get(assign.id).equals(Keyword.INT_TYPE) && !isInt) {
 				throw new IllegalArgumentException(String.format(
-						"Error: cannot assign float '%s' to int variable '%s'", result, assign.id));
+						"cannot assign float '%s' to int variable '%s'", result, assign.id));
 			}
 		}
 
@@ -102,7 +122,7 @@ public class ExpressionProcessor {
 			Variable var = (Variable) e;
 
 			if (!values.containsKey(var.id)) {
-				String error = String.format("Error: variable '%s' not declared", var.id);
+				String error = String.format("variable '%s' not declared", var.id);
 				throw new Error(error);
 			}
 
@@ -143,7 +163,7 @@ public class ExpressionProcessor {
 					(left instanceof String && right instanceof Integer))) {
 				result = left.toString() + right.toString();
 			} else {
-				String error = String.format("Error: cannot apply '%s' to non-numbers", operator);
+				String error = String.format("cannot apply '%s' to non-numbers", operator);
 				throw new Error(error);
 			}
 
@@ -160,7 +180,7 @@ public class ExpressionProcessor {
 						break;
 					case Keyword.DIVIDE:
 						if ((double) right == 0) {
-							throw new IllegalArgumentException("Error: division by zero");
+							throw new IllegalArgumentException("division by zero");
 						}
 						result = (double) left / (double) right;
 						break;
@@ -175,7 +195,7 @@ public class ExpressionProcessor {
 						break;
 					case Keyword.DIVIDE:
 						if ((int) right == 0) {
-							throw new IllegalArgumentException("Error: division by zero");
+							throw new IllegalArgumentException("division by zero");
 						}
 						result = (int) left / (int) right;
 						break;
@@ -184,7 +204,7 @@ public class ExpressionProcessor {
 						break;
 				}
 			} else {
-				String error = String.format("Error: cannot apply '%s' to non-numbers", operator);
+				String error = String.format("cannot apply '%s' to non-numbers", operator);
 				throw new Error(error);
 			}
 			;
@@ -198,7 +218,7 @@ public class ExpressionProcessor {
 			} else if (expr instanceof Integer) {
 				result = -((int) expr);
 			} else {
-				String error = String.format("Error: cannot apply '-' to non-number");
+				String error = String.format("cannot apply '-' to non-number");
 				throw new Error(error);
 			}
 		} else if (e instanceof Bool) {
@@ -213,7 +233,7 @@ public class ExpressionProcessor {
 			if (left instanceof Boolean && right instanceof Boolean) {
 				result = (boolean) left && (boolean) right;
 			} else {
-				String error = String.format("Error: cannot apply '&&' to non-boolean");
+				String error = String.format("cannot apply '&&' to non-boolean");
 				throw new Error(error);
 			}
 		} else if (e instanceof Or) {
@@ -224,7 +244,7 @@ public class ExpressionProcessor {
 			if (left instanceof Boolean && right instanceof Boolean) {
 				result = (boolean) left || (boolean) right;
 			} else {
-				String error = String.format("Error: cannot apply '||' to non-boolean");
+				String error = String.format("cannot apply '||' to non-boolean");
 				throw new Error(error);
 			}
 		} else if (e instanceof Not) {
@@ -234,7 +254,7 @@ public class ExpressionProcessor {
 			if (expr instanceof Boolean) {
 				result = !((boolean) expr);
 			} else {
-				String error = String.format("Error: cannot apply '!' to non-boolean");
+				String error = String.format("cannot apply '!' to non-boolean");
 				throw new Error(error);
 			}
 		} else if (e instanceof Equality) {
@@ -288,7 +308,7 @@ public class ExpressionProcessor {
 						break;
 				}
 			} else {
-				String error = String.format("Error: cannot apply '%s' to non-numbers", operator);
+				String error = String.format("cannot apply '%s' to non-numbers", operator);
 				throw new Error(error);
 			}
 		} else if (e instanceof FunctionCall) {
