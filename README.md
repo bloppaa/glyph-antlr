@@ -15,7 +15,7 @@ Existen cuatro tipos primitivos. A continuación se especifican los valores que 
 
 - `int (🧮)`: números enteros que cumplan con la expresión regular `'0' | [1-9][0-9]*`. Ejemplos de valores válidos son `0`, `123`, `-333`, etc.
 - `float (🛟)`: números de punto flotante, que cumplan con la expresión regular `('0' | [1-9][0-9]*) ('.' [0-9]+)?`. Ejemplos de valores válidos son `3.14`, `0.001`, `1`, etc. Fijarse que es posible asignar enteros a este tipo, no así viceversa.
-- `bool (✅)`: valores binarios, que sólo pueden tomar el valor `👍` *(expresión verdadera)* o `👎` *(expresión falsa)*.
+- `bool (✅)`: valores binarios, que sólo pueden tomar el valor `👍` _(expresión verdadera)_ o `👎` _(expresión falsa)_.
 - `string (📄)`: cualquier combinación de caracteres delimitadas por el token `🧵`. Ejemplos de valores válidos son `🧵🧵`, `🧵Hola Mundo🧵`, `🧵123🧵`, etc.
 
 ### Variables
@@ -24,8 +24,7 @@ Las variables se declaran de la siguiente manera:
 
 `tipo-variable id-variable 👉 valor-variable ✋`, donde:
 
-
-- `tipo-variable` puede ser uno de los cuatros tipos primitivos: *int* (🧮), *float* (🛟), *bool* (✅) o *string* (📄).
+- `tipo-variable` puede ser uno de los cuatros tipos primitivos: _int_ (🧮), _float_ (🛟), _bool_ (✅) o _string_ (📄).
 - `id-variable` es cualquier string que cumpla con la expresión regular `[a-z][a-zA-Z0-9_]*`.
 - `👉` es el operador de asignación.
 - `valor-variable` es el valor acorde al tipo de dato.
@@ -56,13 +55,13 @@ Cabe destacar que no es posible reasignar un valor con un tipo distinto al decla
 sum 👉 1.0 ✋ 💭 No es posible asignar un float a int
 ```
 
-> *Nota:* El emoji 💭 es usado para escribir comentarios. Cualquier caracter escrito hasta un salto de línea será ignorado por el compilador.
+> _Nota:_ El emoji 💭 es usado para escribir comentarios. Cualquier caracter escrito hasta un salto de línea será ignorado por el compilador.
 
 ### Operadores
 
 Las operaciones permitidas son:
 
-- Aritméticas: *suma* (➕), *resta* (➖), *multiplicación* (✖️), *división (➗)* y *módulo* (🪙).
+- Aritméticas: _suma_ (➕), _resta_ (➖), _multiplicación_ (✖️), _división (➗)_ y _módulo_ (🪙).
 
 ```
 1 ➕ 2 ✋ 💭 3
@@ -72,7 +71,7 @@ Las operaciones permitidas son:
 5 🪙 2 ✋ 💭 1
 ```
 
-- Lógicas: *and* (🤝), *or* (🤷) y *not* (🙅).
+- Lógicas: _and_ (🤝), _or_ (🤷) y _not_ (🙅).
 
 ```
 👍 🤝 👎 ✋ 💭 👎
@@ -80,7 +79,7 @@ Las operaciones permitidas son:
 🙅 👎 ✋ 💭 👍
 ```
 
-- Relacionales: *igual* (🟰), *distinto* (🚫), *mayor* (▶️), *menor* (◀️), *mayor o igual* (⏩) y *menor o igual* (⏪).
+- Relacionales: _igual_ (🟰), _distinto_ (🚫), _mayor_ (▶️), _menor_ (◀️), _mayor o igual_ (⏩) y _menor o igual_ (⏪).
 
 ```
 1 🟰 1 ✋ 💭 👍
@@ -102,7 +101,7 @@ El resultado de las operaciones puede ser asignado a una variable:
 
 #### If-else
 
-Un bloque *if-else* se define de la siguiente manera:
+Un bloque _if-else_ se define de la siguiente manera:
 
 ```
 🤔 🧎‍➡️expresión-booleana🧎
@@ -116,16 +115,17 @@ Un bloque *if-else* se define de la siguiente manera:
     ...
 🏃
 ```
+
 Donde:
 
-- `🤔` es la keyword que indica el inicio de un bloque *if*.
+- `🤔` es la keyword que indica el inicio de un bloque _if_.
 - `🧎‍➡️` es el token de apertura de la expresión booleana.
 - `expresión-booleana` es cualquier expresión que devuelva un valor booleano.
 - `🧎` es el token de cierre de la expresión booleana.
 - `🏃‍➡️` es el token de apertura del bloque de instrucciones.
 - `🏃` es el token de cierre del bloque de instrucciones.
 - `instrucción-if-i` son las instrucciones que se ejecutan si la expresión es verdadera.
-- `👇` es la keyword *opcional* que indica el inicio de un bloque *else*.
+- `👇` es la keyword _opcional_ que indica el inicio de un bloque _else_.
 - `instrucción-else-i` son las instrucciones que se ejecutan si la expresión es falsa.
 
 Ejemplo:
@@ -139,11 +139,12 @@ Ejemplo:
     🖨️🧎‍➡️🧵Es impar🧵🧎✋
 🏃
 ```
-> *Nota:* La keyword `🖨️` permite mostrar expresiones por consola.
+
+> _Nota:_ La keyword `🖨️` permite mostrar expresiones por consola.
 
 #### While-loop
 
-Un bloque *while* se define de la siguiente manera:
+Un bloque _while_ se define de la siguiente manera:
 
 ```
 🌀 🧎‍➡️expresión-booleana🧎
@@ -153,9 +154,10 @@ Un bloque *while* se define de la siguiente manera:
     ...
 🏃
 ```
+
 Donde:
 
-- `🌀` es la keyword que indica el inicio de un bloque *while*.
+- `🌀` es la keyword que indica el inicio de un bloque _while_.
 
 Ejemplo:
 
@@ -170,7 +172,7 @@ Ejemplo:
 
 #### For-loop
 
-Un bloque *for* se define de la siguiente manera:
+Un bloque _for_ se define de la siguiente manera:
 
 ```
 🔁 🧎‍➡️variable 👉 inicio ➡️ fin 👟 paso🧎
@@ -180,17 +182,19 @@ Un bloque *for* se define de la siguiente manera:
     ...
 🏃
 ```
+
 Donde:
 
-- `🔁` es la keyword que indica el inicio de un bloque *for*.
+- `🔁` es la keyword que indica el inicio de un bloque _for_.
 - `variable` es el identificador de la variable que se utilizará en el ciclo.
 - `inicio` es el valor inicial de la variable.
 - `➡️` simplemente indica que se está definiendo el rango de la variable.
 - `fin` es el valor final de la variable.
-- `👟` es un token *opcional* que indica la cantidad de pasos del ciclo.
+- `👟` es un token _opcional_ que indica la cantidad de pasos del ciclo.
 - `paso` es la cantidad de pasos que se incrementará la variable en cada iteración.
 
 Ejemplo:
+
 ```
 🔁 🧎‍➡️i 👉 0 ➡️ 10 👟 2🧎
 🏃‍➡️
@@ -211,16 +215,18 @@ Las funciones se definen de la siguiente manera:
     ↩️ expresión ✋
 🏃
 ```
+
 Donde:
 
 - `🍿` es la keyword que indica el inicio de una función.
 - `nombre-función` es el identificador de la función.
-- `tipo-i` es el tipo de dato del parámetro *opcional*.
-- `var-i` es el identificador del parámetro *opcional*.
+- `tipo-i` es el tipo de dato del parámetro _opcional_.
+- `var-i` es el identificador del parámetro _opcional_.
 - `🔸` es el token que separa los parámetros.
 - `↩️` es la keyword que indica el retorno de la función.
 
 Ejemplo:
+
 ```
 🍿 isEven 🧎‍➡️🧮 num🧎
 🏃‍➡️
@@ -279,7 +285,7 @@ expr:
 	| expr (PLUS | MINUS) expr # AddSub
 ```
 
-El orden de las producciones es importante, ya que ANTLR4 intentará hacer *match* con la primera producción que coincida con la entrada. De esta manera, es posible definir la jerarquía de las operaciones y las reglas de precedencia.
+El orden de las producciones es importante, ya que ANTLR4 intentará hacer _match_ con la primera producción que coincida con la entrada. De esta manera, es posible definir la jerarquía de las operaciones y las reglas de precedencia.
 
 A continuación se muestra el árbol de parseo generado por ANTLR4 para la expresión `1 ➕ 2 ✖️ 3 ✋`:
 
@@ -362,7 +368,7 @@ public class AntlrToExpression extends ExprBaseVisitor<Expression> {
 
         return new VariableDeclaration(id, type, expr);
     }
-}   
+}
 ```
 
 Este mismo patrón se repite para cada uno de los nodos del árbol de parseo. Al finalizar el método `visitProgram`, se tendrá un objeto `Program` con todas las expresiones del programa.
@@ -477,10 +483,16 @@ Imprime los primeros 100 números primos.
 
 ## Testing
 
-El compilador se encuentra alojado en Replit, por lo que es posible probar los ejemplos o crear nuevos scripts sin tener que instalar nada. Para ello, accede al siguiente [enlace](https://replit.com/@Blopa11/glyph-compiler).
+Para probar los ejemplos o incluso escribir tus propios programas, es necesario tener [Java](https://www.oracle.com/cl/java/technologies/downloads/) instalado.
 
-Para compilar un programa, se necesita ejecutar el siguiente comando en la shell:
+El archivo `glyph.jar` contiene el compilador de Glyph. Para compilar un programa, ejecutar el siguiente comando en la shell:
 
 ```bash
 java -jar glyph.jar <nombre-archivo>
+```
+
+Por ejemplo, para compilar el programa de Fibonacci, ejecutar el siguiente comando:
+
+```bash
+java -jar glyph.jar examples/fibonacci.gly
 ```
