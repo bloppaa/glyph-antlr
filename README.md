@@ -267,11 +267,11 @@ cond:
 	)? # Condition;
 
 expr:
-	LPAREN expr RPAREN			   # Parens
-	| MINUS expr				   # UnaryMinus
-	| NOT expr					   # Not
+	LPAREN expr RPAREN # Parens
+	| MINUS expr # UnaryMinus
+	| NOT expr # Not
 	| expr (MULT | DIV | MOD) expr # MultDivMod
-	| expr (PLUS | MINUS) expr	   # AddSub
+	| expr (PLUS | MINUS) expr # AddSub
 ```
 
 El orden de las producciones es importante, ya que ANTLR4 intentará hacer *match* con la primera producción que coincida con la entrada. De esta manera, es posible definir la jerarquía de las operaciones y las reglas de precedencia.
