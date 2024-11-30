@@ -1,5 +1,10 @@
 # Glyph
 
+Hecho con ❤️ por:
+
+- Pablo Cortés - 20.600.436-3
+- Fabricha Ramírez - 20.990.386-5
+
 Glyph es un lenguaje de programación basado en emojis, donde las palabras clave y los tokens tradicionales son reemplazados por símbolos visuales. Diseñado para ser intuitivo y llamativo, Glyph combina una estética lúdica con una funcionalidad sólida, permitiendo manejar conceptos esenciales de programación como variables, control de flujo y funciones.
 
 ## Gramática
@@ -474,8 +479,8 @@ Imprime los primeros 100 números primos.
 
 El compilador se encuentra alojado en Replit, por lo que es posible probar los ejemplos o crear nuevos scripts sin tener que instalar nada. Para ello, accede al siguiente [enlace](https://replit.com/@Blopa11/glyph-compiler).
 
-Para compilar un programa, se necesita ejecutar el siguiente comando en la consola:
+Para compilar un programa, se necesita ejecutar el siguiente comando en la shell:
 
 ```bash
-java -jar glyph.jar <archivo>
+java -jar glyph.jar <nombre-archivo>
 ```
